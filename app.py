@@ -1,6 +1,7 @@
 import os
 import logging
 import re
+import tempfile
 import yaml
 from flask import Flask, request, jsonify, make_response
 from presidio_analyzer import AnalyzerEngineProvider
@@ -24,43 +25,26 @@ allow_list_terms = set()
 try:
     logger.info("--- Presidio Analyzer Service Starting (Architecture Modulaire) ---")
     config_loader = ConfigLoader()
-    try:
-        config = config_loader.load_config("main.yaml")
-        logger.info("✅ Configuration modulaire chargée avec succès")
+    config = config_loader.load_config("main.yaml")
+    logger.info("✅ Configuration modulaire chargée avec succès")
 
-        # Normalisation douce de l'allow_list (préserve la structure des mots)
-        allow_list_terms = set(term.lower().strip() for term in config.get('allow_list', []))
-        logger.info(f"✅ Allow list chargée avec {len(allow_list_terms)} termes")
+    allow_list_terms = set(term.lower().strip() for term in config.get('allow_list', []))
+    logger.info(f"✅ Allow list chargée avec {len(allow_list_terms)} termes")
 
-        recognizers_count = len(config.get('recognizer_registry', {}).get('recognizers', []))
-        logger.info(f"📊 Nombre de recognizers chargés: {recognizers_count}")
+    recognizers_count = len(config.get('recognizer_registry', {}).get('recognizers', []))
+    logger.info(f"📊 Nombre de recognizers chargés: {recognizers_count}")
 
-        import tempfile
+    presidio_config = config_loader.get_presidio_config()
+    if 'nlp_configuration' not in presidio_config:
+        logger.warning("❌ nlp_configuration MANQUANTE dans la config Presidio")
 
-        # Écriture fichier temporaire config pour Presidio
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False, encoding='utf-8') as tmp_file:
-            yaml.dump(config, tmp_file, default_flow_style=False, allow_unicode=True)
-            temp_config_path = tmp_file.name
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.yaml', delete=False, encoding='utf-8') as tmp_file:
+        yaml.dump(presidio_config, tmp_file, default_flow_style=False, allow_unicode=True)
+        temp_config_path = tmp_file.name
 
-        with open(temp_config_path, 'r', encoding='utf-8') as f:
-            temp_content = f.read()
-            logger.info(f"🔍 Contenu du fichier temporaire COMPLET:\n{temp_content[:1000]}")
-
-        if 'nlp_configuration' in config:
-            logger.info("✅ nlp_configuration trouvée")
-        else:
-            logger.warning("❌ nlp_configuration MANQUANTE dans la config finale")
-
-        provider = AnalyzerEngineProvider(analyzer_engine_conf_file=temp_config_path)
-        analyzer = provider.create_engine()
-        os.unlink(temp_config_path)
-
-    except Exception as e:
-        logger.error(f"❌ Erreur avec la config modulaire: {e}")
-        logger.warning("🔄 Fallback vers default.yaml")
-        CONFIG_FILE_PATH = os.environ.get("PRESIDIO_ANALYZER_CONFIG_FILE", "conf/default.yaml")
-        provider = AnalyzerEngineProvider(analyzer_engine_conf_file=CONFIG_FILE_PATH)
-        analyzer = provider.create_engine()
+    provider = AnalyzerEngineProvider(analyzer_engine_conf_file=temp_config_path)
+    analyzer = provider.create_engine()
+    os.unlink(temp_config_path)
 
     logger.info(f"Analyzer ready. Languages: {analyzer.supported_languages}")
 

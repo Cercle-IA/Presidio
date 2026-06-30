@@ -7,6 +7,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+PRESIDIO_VALID_KEYS = frozenset({'default_score_threshold', 'nlp_configuration', 'recognizer_registry', 'supported_languages'})
+
 class ConfigLoader:
     def __init__(self, config_dir: str = "conf"):
         self.config_dir = config_dir
@@ -118,6 +120,10 @@ class ConfigLoader:
 
     def get_supported_languages(self) -> List[str]:
         return self.config.get('supported_languages', ['fr'])
+
+    def get_presidio_config(self) -> Dict[str, Any]:
+        """Returns only the keys accepted by AnalyzerEngineProvider."""
+        return {k: v for k, v in self.config.items() if k in PRESIDIO_VALID_KEYS}
 
     def load_single_file(self, file_path: str) -> Dict[str, Any]:
         full_path = os.path.join(self.config_dir, file_path) if not os.path.isabs(file_path) else file_path
