@@ -1,0 +1,28 @@
+Test des cas limites et edge cases
+
+--- Chiffres d'affaires : arrondis attendus ---
+CA = 1 000 000 EUR       -> attendu : [900 000 - 1 100 000] EUR
+CA = 5M EUR              -> attendu : [4 500 000 - 5 500 000] EUR
+CA = 500K €              -> attendu : [450 000 - 550 000] €
+CA de 1,5M EUR           -> attendu : [1 300 000 - 1 700 000] EUR
+Revenue de 10 000 EUR    -> attendu : [9 000 - 11 000] EUR
+Turnover de 100 000 EUR  -> attendu : [90 000 - 110 000] EUR
+
+--- Parts de marché : clamping aux bornes ---
+Part de marché : 1% de part de marché       -> attendu : [0-3.5]%
+Part de marché : 2,5% du marché            -> attendu : [0-5]%
+Part de marché : 50% de part de marché     -> attendu : [47.5-52.5]%
+Part de marché : 98% du marché             -> attendu : [95.5-100]%
+Part de marché : 99,5% de part de marché   -> attendu : [97-100]%
+
+--- Décimales dans les parts de marché ---
+La société détient 33,3% de part de marché.
+Nous représentons 12,75% de parts de marché dans ce secteur.
+Position concurrentielle : 7,5% du marché.
+
+--- Montants avec formatage européen (virgule décimale) ---
+Chiffre d'affaires : 1.500.000 EUR turnover attendu avec point comme séparateur de milliers.
+CA : 2,5M EUR (virgule comme séparateur décimal).
+
+--- Séquences multiples sur la même ligne ---
+CA segment A : 2M EUR chiffre d'affaires, part de marché : 15% de part de marché, CA segment B : 800K EUR turnover.

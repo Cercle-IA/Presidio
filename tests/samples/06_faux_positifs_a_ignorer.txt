@@ -1,0 +1,33 @@
+Test des faux positifs - Ces éléments ne devraient PAS être détectés
+
+--- Pourcentages sans contexte marché ---
+La réduction est de 20% sur tous les articles.
+Notre taux de satisfaction client est de 92%.
+Le taux d'imposition s'élève à 33%.
+Nous avons augmenté la productivité de 15%.
+TVA applicable : 21%.
+La marge brute est de 45%.
+
+--- Montants sans contexte CA ---
+La facture s'élève à 5 000 EUR.
+Amende prononcée : 10 000 €.
+Prix d'achat de l'immeuble : 500 000 EUR.
+Investissement en R&D : 2M EUR (hors CA).
+Budget marketing : 300K EUR.
+Salaire annuel brut : 75 000 EUR.
+
+--- Chiffres sans unité monétaire ni contexte ---
+L'effectif est de 1 500 personnes.
+Production : 10 000 unités par mois.
+Le projet dure 18 mois.
+Score NPS : 67 points.
+
+--- Contexte CA mais montant absent ---
+Le chiffre d'affaires sera communiqué ultérieurement.
+Turnover non divulgué pour des raisons de confidentialité.
+Revenue confidentiel.
+
+--- Contexte marché mais pourcentage absent ---
+Nous cherchons à conquérir des parts de marché.
+La société est leader du secteur depuis plusieurs années.
+Position concurrentielle à renforcer.

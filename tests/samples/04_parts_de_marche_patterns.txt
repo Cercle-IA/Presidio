@@ -1,0 +1,32 @@
+Test des patterns avancés pour les parts de marché
+
+--- Pourcentages avec lookahead marché (score 0.95) ---
+L'entreprise possède 47% de part de marché.
+Nous détenons 22,5% de parts de marché dans ce segment.
+La société représente 1% de part de marché (cas limite bas).
+Position actuelle : 99% du marché (cas limite haut).
+Acquisition de 15% de market share prévu en Q3.
+
+--- Part du CA sectoriel (score 0.85) ---
+Notre société représente 30% du chiffre d'affaires du marché.
+Le groupe concentre 18% du CA du secteur.
+Nous réalisons 25% des revenus du marché de la distribution.
+
+--- Positions textuelles (score 0.85) ---
+Nous sommes leader du marché depuis 2018.
+La société est numéro 1 du secteur agroalimentaire.
+Notre concurrent occupe la position dominante sur ce marché.
+La filiale détient un monopole du secteur.
+
+--- Parts relatives textuelles (score 0.80) ---
+Nous occupons une position majoritaire marché.
+La société joue un rôle significative part de marché dans ce créneau.
+
+--- Pourcentages simples avec contexte boost (score 0.30 + 0.35) ---
+Le groupe représente 60% dans un secteur en forte concentration.
+Selon les analystes, la société détient 28% grâce à sa position concurrentielle.
+Le concurrent contrôle 42% suite à plusieurs acquisitions dans l'industrie.
+
+--- Cas limites (clamping 0-100) ---
+La société détient 1,5% de part de marché (faible mais réel).
+Position quasi-monopolistique : 98,5% de part de marché.

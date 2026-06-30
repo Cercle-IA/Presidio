@@ -350,6 +350,13 @@ def anonymize_text():
 
         logger.info(f"🔍 Résultat anonymisation: '{anonymized_result.text}'")
 
+        replacement_map = {}
+        for item in anonymized_result.items:
+            original_text = text_to_anonymize[item.start:item.end]
+            replacement_map[original_text] = item.text
+
+        logger.info(f"🔍 Replacement map: {replacement_map}")
+
         return jsonify({
             "original_text": text_to_anonymize,
             "anonymized_text": anonymized_result.text,
@@ -361,6 +368,7 @@ def anonymize_text():
                     "score": result.score
                 } for result in filtered_results
             ],
+            "replacement_map": replacement_map,
             "mode": mode
         })
 

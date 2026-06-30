@@ -1,0 +1,29 @@
+Test des différents formats de montants pour le chiffre d'affaires
+
+--- Formats entiers avec séparateurs ---
+Chiffre d'affaires : 1 000 000 EUR
+Turnover : 10 000 000 EUR
+Revenue annuel : 250 000 €
+CA de l'exercice : 999 000 €
+
+--- Formats abrégés (K / M / Md) ---
+Notre CA atteint 5M EUR cette année.
+Le turnover est de 500K EUR.
+Revenus du groupe : 2Md EUR (2 milliards).
+Ventes nettes : 1,5M €
+Chiffre d'affaires : 750K €
+
+--- Formats décimaux ---
+Revenue : 1.2M EUR de chiffre d'affaires
+CA consolidé : 3,75M EUR
+Turnover : 12,5M €
+
+--- Formats multi-devises ---
+Chiffre d'affaires US : 8M USD
+Revenue UK : 2,5M GBP
+CA Suisse : 1M CHF
+
+--- Petits montants (step d'arrondi différent) ---
+Turnover startup : 10 000 EUR
+CA initial : 50 000 €
+Revenue mensuel : 8 500 EUR
