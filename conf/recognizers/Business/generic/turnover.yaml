@@ -1,0 +1,42 @@
+# Recognizer pour chiffres d'affaires / turnover / revenue
+recognizer_registry:
+  recognizers:
+    - name: TurnoverRecognizer
+      supported_language: fr
+      supported_entity: CHIFFRE_AFFAIRES
+      patterns:
+        # Montant suivi d'un mot-clé CA (lookahead variable, contexte après le montant)
+        # Ex: "1 000 000 EUR de chiffre d'affaires", "500 000 € (revenue)"
+        - name: Montant EUR suivi de mot-clé CA
+          regex: "\\b(?:[0-9]{1,3}(?:\\s[0-9]{3})*|[0-9]+)(?:[.,][0-9]{1,2})?\\s*(?:EUR|USD|GBP|CHF|€|\\$)?(?=\\s{0,25}(?:de\\s+)?(?:chiffre(?:\\s+d.affaires)?|turnover|revenue|revenus|\\bCA\\b))"
+          score: 0.90
+
+        # Montant abrégé K/M suivi d'un mot-clé CA
+        # Ex: "5M EUR de chiffre d'affaires", "500K € turnover"
+        - name: Montant abrégé K-M suivi de mot-clé CA
+          regex: "\\b[0-9]+(?:[.,][0-9]+)?\\s*(?:M|K|Md)\\s*(?:EUR|USD|GBP|CHF|€|\\$)?(?=\\s{0,25}(?:de\\s+)?(?:chiffre(?:\\s+d.affaires)?|turnover|revenue|revenus|\\bCA\\b))"
+          score: 0.90
+
+        # Montant EUR/€ seul — score bas, déclenché uniquement si mots-clés CA détectés en proximité
+        # (boost contextuel +0.35 appliqué par Presidio si context[] apparaît dans la fenêtre)
+        - name: Montant EUR seul avec contexte
+          regex: "\\b(?:[0-9]{1,3}(?:\\s[0-9]{3})*|[0-9]+)(?:[.,][0-9]{1,2})?\\s*(?:EUR|€)\\b"
+          score: 0.30
+
+        # Montant abrégé K/M seul — score bas, requiert contexte CA
+        - name: Montant abrégé K-M seul avec contexte
+          regex: "\\b[0-9]+(?:[.,][0-9]+)?\\s*(?:M|K|Md)\\b"
+          score: 0.30
+
+      context:
+        [
+          "chiffre d'affaires",
+          "chiffre d affaires",
+          "chiffre",
+          "affaires",
+          "turnover",
+          "revenue",
+          "revenus",
+          "ventes",
+          "CA",
+        ]

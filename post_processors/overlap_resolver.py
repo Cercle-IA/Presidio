@@ -39,7 +39,8 @@ class OverlapResolver:
             'PERMIS_CONDUIRE_FRANCAIS': 76,
             'PASSEPORT_FRANCAIS': 77,
             'URL': 35,
-            'MARKET_SHARE': 35
+            'MARKET_SHARE': 35,
+            'CHIFFRE_AFFAIRES': 50,
         }
         
         # Patterns pour identifier les organisations

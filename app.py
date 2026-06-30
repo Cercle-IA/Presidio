@@ -10,6 +10,8 @@ from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.entities import OperatorConfig
 from entity_refiners import EntityRefinerManager
 from pipeline_manager import AnalysisPipeline
+from operators.market_share_operator import MarketShareRangeOperator
+from operators.turnover_operator import TurnoverRangeOperator
 
 # Initialisation logger
 logging.basicConfig(level=logging.INFO,
@@ -138,6 +140,7 @@ def filter_by_category(results, mode):
         # Données commerciales
         'MARKET_SHARE', 'SECRET_COMMERCIAL',
         'REFERENCE_CONTRAT', 'MONTANT_FINANCIER',
+        'CHIFFRE_AFFAIRES',
         
         # Données techniques d'entreprise
         'CLE_API_SECRETE'
@@ -252,8 +255,12 @@ def load_replacements():
 # Initialisation anonymizer et opérateurs
 try:
     anonymizer = AnonymizerEngine()
+    anonymizer.add_anonymizer(MarketShareRangeOperator)
+    anonymizer.add_anonymizer(TurnoverRangeOperator)
     logger.info("✅ Anonymizer engine initialized successfully")
     replacement_operators = load_replacements()
+    replacement_operators["MARKET_SHARE"] = OperatorConfig("market_share_range", {})
+    replacement_operators["CHIFFRE_AFFAIRES"] = OperatorConfig("turnover_range", {})
     if replacement_operators:
         logger.info(f"✅ Loaded {len(replacement_operators)} custom replacement operators")
     else:
