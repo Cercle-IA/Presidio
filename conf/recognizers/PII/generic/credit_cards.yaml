@@ -1,7 +1,7 @@
 # Recognizer pour numéros de carte de crédit
 recognizer_registry:
   recognizers:
-    - name: CreditCardRecognizer
+    - name: CustomCreditCardRecognizer
       supported_language: fr
       supported_entity: CREDIT_CARD
       patterns:

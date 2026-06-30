@@ -1,7 +1,7 @@
 # Recognizer pour adresses email
 recognizer_registry:
   recognizers:
-    - name: EmailRecognizer
+    - name: CustomEmailRecognizer
       supported_language: fr
       supported_entity: ADRESSE_EMAIL
       patterns:
