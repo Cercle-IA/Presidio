@@ -1,0 +1,14 @@
+# Recognizer pour données biométriques
+recognizer_registry:
+  recognizers:
+    - name: BiometricDataRecognizer
+      supported_language: fr
+      supported_entity: BIOMETRIC_DATA
+      patterns:
+        - name: Données biométriques
+          regex: "\\b(?:empreinte(?:s)?\\s+digitale(?:s)?|reconnaissance\\s+faciale|scan\\s+(?:iris|rétine)|biométrie|ADN|profil\\s+génétique)\\b"
+          score: 0.95
+        - name: Identifiants biométriques
+          regex: "\\b(?:template|hash)\\s+biométrique\\s*:?\\s*[A-F0-9]{32,}\\b"
+          score: 0.9
+      context: ["biométrie", "empreinte", "reconnaissance", "scan", "identification"]

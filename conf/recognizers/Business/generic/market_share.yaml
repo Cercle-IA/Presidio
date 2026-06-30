@@ -1,0 +1,56 @@
+# Recognizer pour parts de marché
+recognizer_registry:
+  recognizers:
+    - name: MarketShareRecognizer
+      supported_language: fr
+      supported_entity: MARKET_SHARE
+      patterns:
+        # Pourcentages simples (nouveau pattern plus permissif)
+        - name: Simple Percentage
+          regex: "\\b\\d{1,2}(?:[,.]\\d{1,2})?%\\b"
+          score: 0.7
+
+        # Part de marché explicite
+        - name: Explicit Market Share
+          regex: "\\b(?:part\\s+de\\s+marché|parts?\\s+de\\s+marché)\\b"
+          score: 0.9
+
+        # Pourcentages de marché avec contexte
+        - name: Market Share Percentage
+          regex: "\\b(?:détient|possède|contrôle|représente)?\\s*(?:environ\\s+)?(?:\\d{1,2}(?:[,.]\\d{1,2})?%)\\s*(?:de\\s+(?:part\\s+de\\s+)?marché|du\\s+marché|de\\s+parts?)\\b"
+          score: 0.9
+
+        # Positions de marché
+        - name: Market Position
+          regex: "\\b(?:leader|numéro\\s+\\d+|\\d+(?:er|ème)\\s+acteur|position\\s+dominante|monopole)\\s+(?:du\\s+)?(?:marché|secteur)\\b"
+          score: 0.85
+
+        # Parts relatives
+        - name: Relative Market Share
+          regex: "\\b(?:majoritaire|minoritaire|principale|significative)\\s+(?:part\\s+de\\s+)?marché\\b"
+          score: 0.8
+
+        # Données de concentration
+        - name: Market Concentration
+          regex: "\\b(?:concentration|consolidation|fusion)\\s+(?:du\\s+)?marché\\b"
+          score: 0.75
+
+        # Chiffres d'affaires relatifs
+        - name: Revenue Share
+          regex: "\\b(?:\\d{1,2}(?:[,.]\\d{1,2})?%)\\s*(?:du\\s+)?(?:chiffre\\s+d'affaires|CA|revenus?)\\s+(?:du\\s+)?(?:marché|secteur)\\b"
+          score: 0.85
+
+      context:
+        [
+          "part de marché",
+          "position concurrentielle",
+          "leader",
+          "concurrent",
+          "secteur",
+          "industrie",
+          "chiffre d'affaires",
+          "revenus",
+          "concentration",
+          "monopole",
+          "oligopole",
+        ]

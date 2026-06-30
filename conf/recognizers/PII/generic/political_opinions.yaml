@@ -1,0 +1,11 @@
+# Recognizer pour opinions politiques
+recognizer_registry:
+  recognizers:
+    - name: PoliticalOpinionsRecognizer
+      supported_language: fr
+      supported_entity: POLITICAL_OPINIONS
+      patterns:
+        - name: Opinions politiques
+          regex: "\\b(?:vote|électeur|parti\\s+politique|opinion\\s+politique)\\b"
+          score: 0.7
+      context: ["données sensibles", "RGPD", "politique", "privé"]

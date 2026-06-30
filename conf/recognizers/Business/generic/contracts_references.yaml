@@ -1,0 +1,20 @@
+# Recognizer pour contrats et références internes
+recognizer_registry:
+  recognizers:
+    - name: ContractReferenceRecognizer
+      supported_language: fr
+      supported_entity: REFERENCE_CONTRAT
+      patterns:
+        - name: Numéro de contrat
+          regex: "\\b(?:contrat|contract)\\s*n?°?\\s*:?\\s*[A-Z0-9\\-/]{4,15}\\b"
+          score: 0.95
+        - name: Référence interne
+          regex: "\\b(?:ref|référence|dossier)\\s*:?\\s*[A-Z]{2,4}[\\-/]?[0-9]{4,8}\\b"
+          score: 0.9
+        - name: ID transaction
+          regex: "\\b(?:transaction|trans)\\s*ID\\s*:?\\s*[A-Z0-9]{6,12}\\b"
+          score: 0.95
+        - name: Numéro de facture
+          regex: "\\b(?:facture|invoice)\\s*n?°?\\s*:?\\s*[A-Z0-9\\-/]{4,12}\\b"
+          score: 0.9
+      context: ["contrat", "référence", "dossier", "facture", "transaction", "commande"]

@@ -1,0 +1,91 @@
+recognizer_registry:
+  recognizers:
+    - name: DateTimeRecognizer
+      supported_language: fr
+      supported_entity: DATE
+      patterns:
+        # Formats français standards avec différents séparateurs
+        - name: Date française DD/MM/YYYY
+          regex: "\\b(?:0?[1-9]|[12][0-9]|3[01])/(?:0?[1-9]|1[0-2])/(?:19|20)\\d{2}\\b"
+          score: 0.95
+
+        - name: Date française DD-MM-YYYY
+          regex: "\\b(?:0?[1-9]|[12][0-9]|3[01])-(?:0?[1-9]|1[0-2])-(?:19|20)\\d{2}\\b"
+          score: 0.95
+
+        # NOUVEAU: Formats courts DD-MM-YY
+        - name: Date française DD-MM-YY
+          regex: "\\b(?:0?[1-9]|[12][0-9]|3[01])-(?:0?[1-9]|1[0-2])-\\d{2}\\b"
+          score: 0.90
+
+        - name: Date française DD/MM/YY
+          regex: "\\b(?:0?[1-9]|[12][0-9]|3[01])/(?:0?[1-9]|1[0-2])/\\d{2}\\b"
+          score: 0.90
+
+        - name: Date belge DD.MM.YY
+          regex: "\\b(?:0?[1-9]|[12][0-9]|3[01])\\.(?:0?[1-9]|1[0-2])\\.\\d{2}\\b"
+          score: 0.90
+
+        - name: Date courte
+          regex: "\\b\\d{1,2}[-/.]\\d{1,2}[-/.]\\d{2}\\b"
+          score: 0.85
+
+        - name: Date française DD MM YYYY (espaces)
+          regex: "\\b(?:0?[1-9]|[12][0-9]|3[01])\\s+(?:0?[1-9]|1[0-2])\\s+(?:19|20)\\d{2}\\b"
+          score: 0.9
+
+        - name: Date ISO YYYY-MM-DD
+          regex: "\\b(?:19|20)\\d{2}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])\\b"
+          score: 0.98
+
+        # Dates avec mois en lettres (joli format)
+        - name: Date avec mois en lettres
+          regex: "\\b(?:0?[1-9]|[12][0-9]|3[01])\\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\\s+(?:19|20)\\d{2}\\b"
+          score: 0.99
+
+        # Format belge DD.MM.YYYY
+        - name: Date belge DD.MM.YYYY
+          regex: "\\b(?:0?[1-9]|[12][0-9]|3[01])\\.(?:0?[1-9]|1[0-2])\\.(?:19|20)\\d{2}\\b"
+          score: 0.95
+
+        # Heures (HH:MM et HH:MM:SS)
+        - name: Heure HH:MM(:SS)?
+          regex: "\\b(?:[01]?[0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?\\b"
+          score: 0.85
+
+        # Date et heure combinées (ex: 12/05/2023 14:30)
+        - name: Date et heure combinées
+          regex: "\\b(?:0?[1-9]|[12][0-9]|3[01])[/-](?:0?[1-9]|1[0-2])[/-](?:19|20)\\d{2}\\s+(?:[01]?[0-9]|2[0-3]):[0-5][0-9](?::[0-5][0-9])?\\b"
+          score: 0.97
+
+        # Années seules dans un contexte fort
+        - name: Année avec contexte
+          regex: "\\b(?:en|depuis|année|an|né en|décédé en)\\s+(?:19|20)\\d{2}\\b"
+          score: 0.8
+
+      context:
+        [
+          "date",
+          "né le",
+          "née le",
+          "naissance",
+          "décès",
+          "décédé le",
+          "le",
+          "du",
+          "au",
+          "depuis",
+          "jusqu'au",
+          "entre",
+          "avant",
+          "après",
+          "heure",
+          "horaire",
+          "rendez-vous",
+          "réunion",
+          "événement",
+          "signature",
+          "signé le",
+          "établi le",
+          "fait le",
+        ]

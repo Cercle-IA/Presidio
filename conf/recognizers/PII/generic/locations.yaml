@@ -1,0 +1,31 @@
+# Recognizer pour lieux géographiques
+recognizer_registry:
+  recognizers:
+    - name: LocationRecognizer
+      supported_language: fr
+      supported_entity: LOCATION
+      patterns:
+        - name: Ville française (sauf si dans adresse)
+          regex: "(?<!\\d{1,4}(?:bis|ter|quater)?\\s+(?:rue|avenue|boulevard|place|impasse|allée|chemin|route|square|villa|cité|passage|quai|cours|esplanade)\\s+[A-Za-zà-ÿ\\s'-]+?,\\s*[0-9]{5}\\s+)\\b(?:Paris|Marseille|Lyon|Toulouse|Nice|Nantes|Strasbourg|Montpellier|Bordeaux|Lille|Rennes|Reims|Le Havre|Saint-Étienne|Toulon|Grenoble|Dijon|Angers|Nîmes|Villeurbanne|Saint-Denis|Le Mans|Aix-en-Provence|Clermont-Ferrand|Brest|Limoges|Tours|Amiens|Perpignan|Metz|Besançon|Boulogne-Billancourt|Orléans|Mulhouse|Rouen|Caen|Nancy|Saint-Denis|Argenteuil|Montreuil|Roubaix|Tourcoing|Nanterre|Avignon|Créteil|Dunkerque|Poitiers|Asnières-sur-Seine|Courbevoie|Versailles|Colombes|Fort-de-France|Aulnay-sous-Bois|Saint-Pierre|Rueil-Malmaison|Pau|Aubervilliers|Champigny-sur-Marne|Antibes|La Rochelle|Cannes|Calais|Béziers|Colmar|Bourges|Mérignac|Saint-Nazaire|Issy-les-Moulineaux|Noisy-le-Grand|Évry|Cergy|Pessac|Vénissieux|Ivry-sur-Seine|Clichy|Troyes|Lorient|Montauban|Neuilly-sur-Seine|Antony|Sarcelles|Niort|Chambéry|Le Blanc-Mesnil|Beauvais|Maisons-Alfort|Chelles|Meaux|Levallois-Perret|Valence|Quimper|Arras|Villejuif|Hyères|La Seyne-sur-Mer|Fréjus|Albi|Sartrouville|Fontenay-sous-Bois|Clamart|Sevran|Compiègne|Drancy|Le Tampon|Bayonne|Massy|Gennevilliers|Corbeil-Essonnes|Saint-Ouen|Garges-lès-Gonesse|Bagneux|Cagnes-sur-Mer|Grasse|Talence|Castres|Douai|Wattrelos|Cholet|Vannes|Suresnes|Puteaux|Gagny|Belfort|Chartres|Saint-Priest|Vincennes|Montrouge|Meyzieu|Villepinte|Caluire-et-Cuire|Bourg-en-Bresse|Roanne|Concarneau|Saint-Brieuc|Épinay-sur-Seine|Vaulx-en-Velin|Rosny-sous-Bois|Arles|Thonon-les-Bains|Viry-Châtillon|Alfortville|Livry-Gargan|Herblay|Houilles|Schiltigheim|Franconville|Châtillon|Nogent-sur-Marne|Pontoise|L'Haÿ-les-Roses|Malakoff|Châtenay-Malabry|Conflans-Sainte-Honorine|Villemomble|Tremblay-en-France|Montigny-le-Bretonneux|Athis-Mons|Chatou|Villeneuve-Saint-Georges|Les Mureaux|Champs-sur-Marne|Yerres|Savigny-sur-Orge|Villetaneuse|Sainte-Geneviève-des-Bois|Marignane|Goussainville|Stains|Poissy|Rillieux-la-Pape|Charleville-Mézières)\\b"
+          score: 0.7
+        - name: Pays
+          regex: "\\b(?:France|Belgique|Suisse|Canada|Allemagne|Italie|Espagne|Portugal|Royaume-Uni|États-Unis|Maroc|Algérie|Tunisie|Sénégal|Côte d'Ivoire|Mali|Burkina Faso|Niger|Tchad|République centrafricaine|Cameroun|Gabon|République démocratique du Congo|Madagascar|Maurice|Seychelles|Comores|Djibouti|Vanuatu|Nouvelle-Calédonie|Polynésie française|Wallis-et-Futuna|Saint-Pierre-et-Miquelon|Mayotte|Guyane|Martinique|Guadeloupe|La Réunion)\\b"
+          score: 0.85
+        - name: Lieu de naissance
+          regex: "\\b(?:né|née|naissance)\\s+(?:à|au|aux|en|dans)\\s+([A-ZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ][a-zàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþß'-]+(?:[\\s-][A-Za-zàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþß'-]+)*)\\b"
+          score: 0.95
+        - name: Région française
+          regex: "\\b(?:Île-de-France|Auvergne-Rhône-Alpes|Hauts-de-France|Nouvelle-Aquitaine|Occitanie|Grand Est|Provence-Alpes-Côte d'Azur|Pays de la Loire|Bretagne|Normandie|Bourgogne-Franche-Comté|Centre-Val de Loire|Corse)\\b"
+          score: 0.8
+      context:
+        [
+          "lieu",
+          "ville",
+          "pays",
+          "région",
+          "naissance",
+          "domicile",
+          "résidence",
+          "né",
+          "née",
+        ]

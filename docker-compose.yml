@@ -1,0 +1,9 @@
+services:
+  presidio-analyzer:
+    build:
+      context: .
+      dockerfile: Dockerfile.analyzer
+    container_name: presidio-analyzer
+    restart: unless-stopped
+    ports:
+      - "5001:5001"

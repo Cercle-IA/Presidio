@@ -1,0 +1,17 @@
+# Recognizer pour données de santé
+recognizer_registry:
+  recognizers:
+    - name: HealthDataRecognizer
+      supported_language: fr
+      supported_entity: HEALTH_DATA
+      patterns:
+        - name: Informations médicales
+          regex: "\\b(?:maladie|pathologie|diagnostic|traitement|médicament|hospitalisation|chirurgie|opération|allergie|antécédent|symptôme)\\b"
+          score: 0.85
+        - name: Données médicales sensibles
+          regex: "\\b(?:VIH|SIDA|cancer|diabète|dépression|schizophrénie|bipolarité|addiction)\\b"
+          score: 0.95
+        - name: Professionnels de santé
+          regex: "\\b(?:Dr|Docteur|Médecin|Infirmier|Psychiatre|Psychologue)\\s+[A-Z][a-z]+\\b"
+          score: 0.9
+      context: ["santé", "médical", "hôpital", "clinique", "patient", "dossier médical"]

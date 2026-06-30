@@ -1,0 +1,20 @@
+# Recognizer pour adresses françaises
+recognizer_registry:
+  recognizers:
+    - name: FrenchAddressRecognizer
+      supported_language: fr
+      supported_entity: ADRESSE_FRANCAISE
+      patterns:
+        - name: Adresse française complète avec virgule
+          regex: "\\b\\d{1,4}(?:bis|ter|quater)?\\s+(?:rue|avenue|boulevard|place|impasse|allée|chemin|route|square|villa|cité|passage|quai|cours|esplanade)\\s+[A-Za-zà-ÿ\\s'-]+?,\\s*[0-9]{5}\\s+[A-Za-zà-ÿ'-]+(?=\\s*$|\\s*\\n|\\s*-)"
+          score: 0.95
+        - name: Adresse française sans virgule
+          regex: "\\b\\d{1,4}(?:bis|ter|quater)?\\s+(?:rue|avenue|boulevard|place|impasse|allée|chemin|route|square|villa|cité|passage|quai|cours|esplanade)\\s+[A-Za-zà-ÿ\\s'-]+?\\s+[0-9]{5}\\s+[A-Za-zà-ÿ'-]+(?=\\s*$|\\s*\\n|\\s*-)"
+          score: 0.9
+        - name: Numéro et type de voie
+          regex: "\\b\\d{1,4}(?:bis|ter|quater)?\\s+(?:rue|avenue|boulevard|place|impasse|allée|chemin|route|square|villa|cité|passage|quai|cours|esplanade)\\s+[A-Za-zà-ÿ\\s'-]{3,30}(?=\\s*[-,]|\\s*$|\\s+[0-9]{5}|\\s*\\n)"
+          score: 0.65
+        - name: Code postal français (isolé)
+          regex: "(?<!\\d{1,4}(?:bis|ter|quater)?\\s+(?:rue|avenue|boulevard|place|impasse|allée|chemin|route|square|villa|cité|passage|quai|cours|esplanade)\\s+[A-Za-zà-ÿ\\s'-]+?,\\s*)\\b[0-9]{5}\\b(?!\\s+[A-Za-zà-ÿ'-]+)"
+          score: 0.6
+      context: ["adresse", "domicile", "résidence", "siège social"]

@@ -1,0 +1,29 @@
+# Recognizer pour montants financiers et devises
+recognizer_registry:
+  recognizers:
+    - name: FinancialAmountRecognizer
+      supported_language: fr
+      supported_entity: MONTANT_FINANCIER
+      patterns:
+        - name: Montant avec devise EUR
+          regex: "\\b(?:[0-9]{1,3}(?:[\\s.,][0-9]{3})*|[0-9]+)(?:[.,][0-9]{1,2})?\\s*€\\b"
+          score: 0.95
+        - name: Montant avec devise USD
+          regex: "\\b(?:[0-9]{1,3}(?:[\\s.,][0-9]{3})*|[0-9]+)(?:[.,][0-9]{1,2})?\\s*(?:USD|\\$)\\b"
+          score: 0.95
+        - name: Montant abrégé avec K/M
+          regex: ""
+          score: 0.9
+        - name: Salaire annuel
+          regex: ""
+          score: 0.95
+      context:
+        [
+          "montant",
+          "prix",
+          "coût",
+          "budget",
+          "salaire",
+          "rémunération",
+          "facture",
+        ]

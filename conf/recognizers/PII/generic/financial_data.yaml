@@ -1,0 +1,17 @@
+# Recognizer pour données financières RGPD
+recognizer_registry:
+  recognizers:
+    - name: RGPDFinancialDataRecognizer
+      supported_language: fr
+      supported_entity: RGPD_FINANCIAL_DATA
+      patterns:
+        - name: Numéro de carte bancaire
+          regex: "\\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13})\\b"
+          score: 1.0
+        - name: Code de sécurité
+          regex: "\\b(?:CVV|CVC|cryptogramme)\\s*:?\\s*[0-9]{3,4}\\b"
+          score: 0.95
+        - name: Revenus
+          regex: "\\b(?:salaire|revenu|rémunération)\\s*:?\\s*[0-9]{1,3}(?:[\\s.,][0-9]{3})*\\s*€?\\b"
+          score: 0.8
+      context: ["financier", "bancaire", "carte", "paiement", "salaire"]

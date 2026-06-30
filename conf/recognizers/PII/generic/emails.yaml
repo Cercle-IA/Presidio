@@ -1,0 +1,24 @@
+# Recognizer pour adresses email
+recognizer_registry:
+  recognizers:
+    - name: EmailRecognizer
+      supported_language: fr
+      supported_entity: ADRESSE_EMAIL
+      patterns:
+        - name: Email standard
+          regex: "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b"
+          score: 1.0
+        - name: Email obfusqué avec crochets
+          regex: "\\b[A-Za-z0-9._%+-]+\\s*\\[at\\]\\s*[A-Za-z0-9.-]+\\s*\\[dot\\]\\s*[A-Z|a-z]{2,}\\b"
+          score: 0.8
+        - name: Email avec (at) et (point)
+          regex: "\\b[A-Za-z0-9._%+-]+\\s*\\(at\\)\\s*[A-Za-z0-9.-]+\\s*\\(point\\)\\s*[A-Z|a-z]{2,}\\b"
+          score: 0.7
+        - name: Email avec arobase écrite
+          regex: "\\b[A-Za-z0-9._%+-]+\\s*(?:arobase|at)\\s*[A-Za-z0-9.-]+\\s*(?:point|dot)\\s*[A-Z|a-z]{2,}\\b"
+          score: 0.75
+        - name: Email avec espaces
+          regex: "\\b[A-Za-z0-9._%+-]+\\s+@\\s+[A-Za-z0-9.-]+\\s+\\.\\s+[A-Z|a-z]{2,}\\b"
+          score: 0.9
+      context:
+        ["email", "courriel", "mail", "@", "contact", "adresse électronique"]

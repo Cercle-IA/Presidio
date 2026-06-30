@@ -1,0 +1,32 @@
+nlp_configuration:
+  nlp_engine_name: spacy
+  models:
+    - lang_code: en
+      model_name: en_core_web_lg
+    - lang_code: fr
+      model_name: fr_core_news_lg
+
+  # Configuration NER globale (sans confidence_thresholds)
+  ner_model_configuration:
+    model_to_presidio_entity_mapping:
+      PER: PERSONNE
+      PERSON: PERSONNE
+      ORG: ORGANISATION
+      ORGANIZATION: ORGANISATION
+      LOC: LOCATION
+      LOCATION: LOCATION
+      DATE: DATE
+      TIME: TIME
+      MISC: MISC
+    labels_to_ignore:
+      - LOCATION
+      - MISC
+      - CARDINAL
+      - EVENT
+      - LANGUAGE
+      - LAW
+      - ORDINAL
+      - PRODUCT
+      - QUANTITY
+      - WORK_OF_ART
+    low_score_entity_names: []

@@ -1,0 +1,11 @@
+# Recognizer pour orientation sexuelle
+recognizer_registry:
+  recognizers:
+    - name: SexualOrientationRecognizer
+      supported_language: fr
+      supported_entity: SEXUAL_ORIENTATION
+      patterns:
+        - name: Orientation sexuelle
+          regex: "\\b(?:homosexuel|hétérosexuel|bisexuel|orientation\\s+sexuelle)\\b"
+          score: 0.9
+      context: ["données sensibles", "RGPD", "orientation", "privé"]

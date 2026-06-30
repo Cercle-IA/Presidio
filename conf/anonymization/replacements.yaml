@@ -1,0 +1,85 @@
+# Configuration d'anonymisation
+anonymizer_config:
+  replacements:
+    # ========================================
+    # ENTITÉS PII (Personally Identifiable Information)
+    # ========================================
+
+    # Données personnelles de base
+    DATE: "[DATE]"
+    DATE_TIME: "[DATE]"
+    PERSONNE: "[PERSONNE]"
+    PERSON: "[PERSONNE]"
+    LOCATION: "[LIEU]"
+    EMAIL_ADDRESS: "[ADRESSE_EMAIL]"
+    ADRESSE_EMAIL: "[ADRESSE_EMAIL]"
+    PHONE_NUMBER: "[TELEPHONE]"
+    CREDIT_CARD: "[CARTE_CREDIT]"
+    IBAN: "[IBAN]"
+    ADRESSE_IP: "[ADRESSE_IP]"
+
+    # Adresses personnelles
+    ADRESSE: "[ADRESSE]"
+    ADRESSE_FRANCAISE: "[ADRESSE_FRANCAISE]"
+    ADRESSE_BELGE: "[ADRESSE_BELGE]"
+
+    # Téléphones personnels
+    TELEPHONE: "[TELEPHONE]"
+    TELEPHONE_FRANCAIS: "[TELEPHONE_FRANCAIS]"
+    TELEPHONE_BELGE: "[TELEPHONE_BELGE]"
+
+    # Documents d'identité personnels
+    NUMERO_SECURITE_SOCIALE_FRANCAIS: "[NUMERO_SECURITE_SOCIALE]"
+    REGISTRE_NATIONAL_BELGE: "[REGISTRE_NATIONAL_BELGE]"
+    CARTE_IDENTITE_FRANCAISE: "[CARTE_IDENTITE_FRANCAISE]"
+    CARTE_IDENTITE_BELGE: "[CARTE_IDENTITE_BELGE]"
+    PASSEPORT_FRANCAIS: "[PASSEPORT_FRANCAIS]"
+    PASSEPORT_BELGE: "[PASSEPORT_BELGE]"
+    PERMIS_CONDUIRE_FRANCAIS: "[PERMIS_CONDUIRE_FRANCAIS]"
+
+    # Données financières personnelles
+    COMPTE_BANCAIRE_FRANCAIS: "[COMPTE_BANCAIRE_FRANCAIS]"
+
+    # ========================================
+    # ENTITÉS BUSINESS (Données d'entreprise)
+    # ========================================
+
+    # Organisations et sociétés
+    ORGANISATION: "[ORGANISATION]"
+    ORGANIZATION: "[ORGANISATION]"
+    SOCIETE_FRANCAISE: "[SOCIETE_FRANCAISE]"
+    SOCIETE_BELGE: "[SOCIETE_BELGE]"
+
+    # Identifiants fiscaux et d'entreprise
+    TVA_FRANCAISE: "[TVA_FRANCAISE]"
+    TVA_BELGE: "[TVA_BELGE]"
+    NUMERO_FISCAL_FRANCAIS: "[NUMERO_FISCAL_FRANCAIS]"
+    SIRET_SIREN_FRANCAIS: "[SIRET_SIREN]"
+    NUMERO_ENTREPRISE_BELGE: "[NUMERO_ENTREPRISE_BELGE]"
+
+    # Identifiants professionnels
+    ID_PROFESSIONNEL_BELGE: "[ID_PROFESSIONNEL_BELGE]"
+
+    # ========================================
+    # ENTITÉS MIXTES (PII + Business)
+    # ========================================
+
+    # Données pouvant être personnelles ou professionnelles
+    TITRE_CIVILITE: "[TITRE_CIVILITE]"
+    DONNEES_PROFESSIONNELLES: "[DONNEES_PROFESSIONNELLES]"
+    REFERENCE_CONTRAT: "[REFERENCE_CONTRAT]"
+    IDENTIFIANT_PERSONNEL: "[IDENTIFIANT_PERSONNEL]"
+
+    # Données techniques et confidentielles
+    LOCALISATION_GPS: "[LOCALISATION_GPS]"
+    SECRET_COMMERCIAL: "[SECRET_COMMERCIAL]"
+    CLE_API_SECRETE: "[CLE_API_SECRETE]"
+    URL_IDENTIFIANT: "[URL_IDENTIFIANT]"
+    DONNEES_BIOMETRIQUES: "[DONNEES_BIOMETRIQUES]"
+    DONNEES_SANTE: "[DONNEES_SANTE]"
+    ORIENTATION_SEXUELLE: "[ORIENTATION_SEXUELLE]"
+    OPINIONS_POLITIQUES: "[OPINIONS_POLITIQUES]"
+    MONTANT_FINANCIER: "[MONTANT_FINANCIER]"
+
+    DONNEES_FINANCIERES_RGPD: "[DONNEES_FINANCIERES_RGPD]"
+    MARKET_SHARE: "[PART_DE_MARCHE]"

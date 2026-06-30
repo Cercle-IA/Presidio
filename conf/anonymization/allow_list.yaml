@@ -1,0 +1,16 @@
+# Liste blanche - termes à ne pas anonymiser
+allow_list:
+  # Références légales
+  - Loi
+  - Code
+  - Règlement
+  - Décret
+  - Arrêté
+  - BCE
+  - TVA
+  - IEC
+  - prestataire
+  # Termes financiers
+  - Taux
+  - Valeur
+  - Prix

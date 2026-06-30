@@ -1,0 +1,17 @@
+# Recognizer pour SIRET/SIREN français
+recognizer_registry:
+  recognizers:
+    - name: FrenchSIRETRecognizer
+      supported_language: fr
+      supported_entity: SIRET_SIREN_FRANCAIS
+      patterns:
+        - name: SIRET complet
+          regex: "\\b[0-9]{3}\\s?[0-9]{3}\\s?[0-9]{3}\\s?[0-9]{5}\\b"
+          score: 0.9
+        - name: SIREN
+          regex: "\\b[0-9]{3}\\s?[0-9]{3}\\s?[0-9]{3}\\b"
+          score: 0.85
+        - name: SIRET avec espaces
+          regex: "\\bSIRET\\s*:?\\s*[0-9]{3}\\s[0-9]{3}\\s[0-9]{3}\\s[0-9]{5}\\b"
+          score: 0.95
+      context: ["SIRET", "SIREN", "établissement", "entreprise", "société"]

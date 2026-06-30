@@ -1,0 +1,71 @@
+# Recognizer pour données professionnelles génériques (France/Belgique)
+recognizer_registry:
+  recognizers:
+    # Recognizer pour titres de civilité
+    - name: GenericCivilityTitleRecognizer
+      supported_language: fr
+      supported_entity: TITRE_CIVILITE
+      patterns:
+        - name: Titres de civilité
+          regex: "\\b(?:M\\.|Mme|Mlle|Dr\\.|Pr\\.|Prof\\.|Docteur|Professeur|Maître|Me\\.)(?=\\s+[A-ZÀ-Ÿ])"
+          score: 0.9
+        - name: Titres honorifiques
+          regex: "\\b(?:Monsieur|Madame|Mademoiselle)(?=\\s+[A-ZÀ-Ÿ])"
+          score: 0.85
+      context: ["identité", "titre", "civilité"]
+
+    # Recognizer pour données professionnelles générales
+    - name: GenericProfessionalDataRecognizer
+      supported_language: fr
+      supported_entity: DONNEES_PROFESSIONNELLES
+      patterns:
+        - name: Titre de poste
+          regex: "\\b(?:directeur|directrice|manager|responsable|chef|ingénieur|ingénieure|consultant|consultante)\\s+[a-zà-ÿ\\s]+\\b"
+          score: 0.8
+        - name: Département
+          regex: "\\b(?:département|service|division)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s]+\\b"
+          score: 0.75
+        - name: Adresse professionnelle
+          regex: "\\b(?:siège\\s+social|adresse\\s+professionnelle)\\s*:?\\s*[0-9]{1,4}\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s'-]+\\b"
+          score: 0.9
+        - name: Email professionnel
+          regex: "\\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\\b"
+          score: 0.85
+        - name: Numéro IEC
+          regex: "\\b(?:n°\\s*IEC|numéro\\s*IEC|IEC)\\s*:?\\s*([0-9]{6,8})\\b"
+          score: 0.9
+        - name: Avocat
+          regex: "\\b(?:avocat|avocate)\\b"
+          score: 0.9
+        - name: Expert-comptable
+          regex: "\\b(?:expert-comptable|expert\\s+comptable)\\b"
+          score: 0.99
+        - name: Notaire
+          regex: "\\b(?:notaire)\\b"
+          score: 0.95
+        - name: Médecin
+          regex: "\\b(?:médecin|docteur\\s+en\\s+médecine)\\b"
+          score: 0.95
+        # Données spécifiques belges intégrées
+        - name: Numéro ONSS employeur
+          regex: "\\b(?:ONSS|onss)\\s*:?\\s*[0-9]{7}\\b"
+          score: 0.95
+        - name: Numéro patronal
+          regex: "\\b(?:numéro\\s+)?patronal\\s*:?\\s*[0-9]{7}\\b"
+          score: 0.9
+      context:
+        [
+          "professionnel",
+          "travail",
+          "bureau",
+          "entreprise",
+          "poste",
+          "fonction",
+          "réglementé",
+          "ordre",
+          "diplôme",
+          "ONSS",
+          "patronal",
+          "employeur",
+          "siège social"
+        ]

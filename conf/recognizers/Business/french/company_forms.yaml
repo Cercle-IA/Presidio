@@ -1,0 +1,23 @@
+# Recognizer pour formes juridiques françaises
+recognizer_registry:
+  recognizers:
+    - name: FrenchCompanyFormsRecognizer
+      supported_language: fr
+      supported_entity: SOCIETE_FRANCAISE
+      patterns:
+        - name: SARL avec nom
+          regex: "\\b(?:SARL|Sarl)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          score: 0.95
+        - name: SAS avec nom
+          regex: "\\b(?:SAS|Sas)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          score: 0.95
+        - name: SA avec nom
+          regex: "\\b(?:SA|Sa)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          score: 0.9
+        - name: EURL avec nom
+          regex: "\\b(?:EURL|Eurl)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          score: 0.95
+        - name: SCI avec nom
+          regex: "\\b(?:SCI|Sci)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          score: 0.9
+      context: ["société", "entreprise", "forme juridique", "statut", "commercial"]

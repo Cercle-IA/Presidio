@@ -1,0 +1,17 @@
+# Recognizer pour numéros de TVA français
+recognizer_registry:
+  recognizers:
+    - name: FrenchVATRecognizer
+      supported_language: fr
+      supported_entity: TVA_FRANCAISE
+      patterns:
+        - name: TVA intracommunautaire française
+          regex: "\\bFR[0-9A-Z]{2}[0-9]{9}\\b"
+          score: 1.0
+        - name: TVA avec espaces
+          regex: "\\bFR\\s[0-9A-Z]{2}\\s[0-9]{3}\\s[0-9]{3}\\s[0-9]{3}\\b"
+          score: 0.95
+        - name: Numéro TVA avec contexte
+          regex: "\\b(?:TVA|tva)\\s*:?\\s*FR[0-9A-Z]{2}[0-9]{9}\\b"
+          score: 1.0
+      context: ["TVA", "intracommunautaire", "numéro de TVA", "identification fiscale"]

@@ -1,0 +1,43 @@
+# Partir d'une image Python 3.9 standard et légère
+FROM python:3.11-slim-bookworm
+
+# Définir le répertoire de travail dans le conteneur
+WORKDIR /app
+
+# ---- OPTIMISATION DU CACHE DOCKER ----
+# 1. Installer les dépendances système et de build
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    python3-dev \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# 2. Mettre à jour pip/setuptools avant d'installer les dépendances
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
+# 3. Copier UNIQUEMENT le fichier requirements.txt
+COPY requirements.txt .
+
+# 4. Installer les dépendances Python. Cette couche sera mise en cache
+# et ne sera pas ré-exécutée si requirements.txt ne change pas.
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 5. Télécharger et installer les modèles de langue pour spaCy
+RUN python -m spacy download fr_core_news_lg
+RUN python -m spacy download en_core_web_lg
+
+# 6. Copier le reste du code de l'application
+# Si vous ne changez que le code de l'app, le pip install ne sera pas refait.
+COPY . /app/
+# ---- FIN DE L'OPTIMISATION ----
+
+# Définir la variable d'environnement pour que Presidio trouve notre fichier de configuration
+
+# Dit à Presidio : "Ton fichier de config est ici"
+ENV PRESIDIO_ANALYZER_CONFIG_FILE=/app/conf/main.yaml
+
+# Exposer le port que Gunicorn va utiliser
+EXPOSE 5001
+
+# Commande finale pour lancer l'application avec Gunicorn
+CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5001", "app:app"]

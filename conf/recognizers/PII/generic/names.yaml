@@ -1,0 +1,37 @@
+# Recognizer pour noms et prénoms génériques
+recognizer_registry:
+  recognizers:
+    - name: GenericPersonNameRecognizer
+      supported_language: fr
+      supported_entity: PERSONNE
+      patterns:
+        - name: Nom avec titre de civilité complet
+          regex: "(?<!\\w)(?:Monsieur|Madame|Mademoiselle|Docteur|Professeur)\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]{2,}(?:\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]{2,})*(?=\\s*\\(|\\s*,|\\s*$|\\s+(?:né|née|demeurant))"
+          score: 0.8
+        - name: Nom avec contexte explicite
+          regex: "(?<=\\b(?:témoin|expert|consultant|gérant|directeur)\\s+)[A-ZÀ-Ÿ][a-zà-ÿ'-]{2,}\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]{2,}(?=\\s*\\(|\\s*,|\\s*$)"
+          score: 0.7
+        - name: Prénom seul avec contexte
+          regex: "(?<=\\b(?:je suis|mon nom est|je m'appelle|appelé|nommé)\\s+)[A-ZÀ-Ÿ][a-zà-ÿ'-]{2,}(?=\\s|$|\\.|,)"
+          score: 0.6
+        - name: Nom complet simple
+          regex: "(?<=\\b(?:témoin|expert|consultant|gérant|directeur|Monsieur|Madame|appelé|nommé)\\s+)[A-ZÀ-Ÿ][a-zà-ÿ'-]{2,}\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]{2,}(?=\\s*\\(|\\s*,|\\s*$)"
+          score: 0.5
+        - name: Prénom français courant
+          regex: "(?<!\\w)(?:Nicolas|Pierre|Jean|Marie|Paul|Michel|Philippe|Alain|Bernard|Christian|Daniel|François|Jacques|Laurent|Marc|Olivier|Pascal|Patrick|Stéphane|Thierry|Vincent|Antoine|Bruno|Christophe|David|Eric|Frédéric|Guillaume|Henri|Julien|Luc|Mathieu|Maxime|Sébastien|Thomas|Yves|Alexandre|André|Arnaud|Benoît|Cédric|Didier|Dominique|Emmanuel|Fabrice|Gérard|Hervé|Jérôme|Lionel|Louis|Ludovic|Marcel|Maurice|Michaël|Patrice|Raphaël|Raymond|Rémi|René|Richard|Robert|Roger|Serge|Sylvain|Sylvie|Anne|Catherine|Christine|Françoise|Isabelle|Martine|Monique|Nathalie|Nicole|Pascale|Sandrine|Sophie|Valérie|Véronique|Brigitte|Chantal|Corinne|Dominique|Élisabeth|Hélène|Jacqueline|Jeanne|Joëlle|Karine|Laurence|Michèle|Nadine|Patricia|Sabine|Simone|Suzanne|Sylviane|Thérèse|Viviane|Yvette|Yvonne|Agnès|Amélie|Audrey|Béatrice|Bénédicte|Camille|Carole|Caroline|Céline|Claire|Delphine|Émilie|Estelle|Évelyne|Florence|Geneviève|Gwenaëlle|Ingrid|Julie|Laetitia|Laure|Magali|Mélanie|Muriel|Odile|Pauline|Solange|Stéphanie|Virginie)(?=\\s|$|\\.|,)"
+          score: 0.7
+      context:
+        [
+          "témoin",
+          "expert",
+          "consultant",
+          "gérant",
+          "directeur",
+          "Monsieur",
+          "Madame",
+          "appelé",
+          "nommé",
+          "je suis",
+          "je m'appelle",
+          "mon nom est",
+        ]

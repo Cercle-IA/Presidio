@@ -1,0 +1,18 @@
+# Recognizer pour numéros INSEE français
+recognizer_registry:
+  recognizers:
+    - name: FrenchINSEERecognizer
+      supported_language: fr
+      supported_entity: NUMERO_SECURITE_SOCIALE_FRANCAIS
+      patterns:
+        - name: INSEE complet avec espaces
+          regex: "\\b[12]\\s*[0-9]{2}\\s*(?:0[1-9]|1[0-2])\\s*(?:2[ABab]|[0-9]{2})\\s*[0-9]{3}\\s*[0-9]{3}[\\s]?[0-9]{2}\\b"
+          score: 0.95
+        - name: NIR compact
+          regex: "\\b[12][0-9]{12}[0-9]{2}\\b"
+          score: 0.85
+        - name: INSEE avec tirets
+          regex: "\\b[12]-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{3}-[0-9]{3}-[0-9]{2}\\b"
+          score: 0.9
+      context:
+        ["sécurité sociale", "insee", "nir", "numéro de sécu", "carte vitale"]

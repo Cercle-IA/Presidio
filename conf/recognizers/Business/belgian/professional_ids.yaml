@@ -1,0 +1,20 @@
+# Recognizer pour identifiants professionnels belges
+recognizer_registry:
+  recognizers:
+    - name: BelgianProfessionalIdRecognizer
+      supported_language: fr
+      supported_entity: ID_PROFESSIONNEL_BELGE
+      patterns:
+        - name: Numéro IEC avec deux points
+          regex: "(?<=\\bIEC\\s*:\\s*)\\d{6}\\b"
+          score: 1.0
+        - name: Numéro IEC général
+          regex: "(?<!IEC\\s*:\\s*)\\b(?:n°\\s*)?IEC\\s*:?\\s*\\d{6}\\b"
+          score: 0.9
+        - name: Numéro d'avocat
+          regex: "\\b(?:avocat\\s+)?n°\\s*\\d{4,6}\\b"
+          score: 0.8
+        - name: Numéro de médecin
+          regex: "\\b(?:Dr\\.|médecin)\\s*n°\\s*\\d{5,7}\\b"
+          score: 0.85
+      context: ["IEC", "avocat", "médecin", "professionnel"]

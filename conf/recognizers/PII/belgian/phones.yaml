@@ -1,0 +1,44 @@
+# Recognizer pour numéros de téléphone belges
+recognizer_registry:
+  recognizers:
+    - name: BelgianPhoneRecognizer
+      supported_language: fr
+      supported_entity: TELEPHONE_BELGE
+      patterns:
+        # Patterns avec contexte Tel: et Tél:
+        - name: Téléphone fixe avec contexte Tel
+          regex: '(?<=Tel\s*:\s*)0[1-9](?:[./\s]?\d{2,3}){3}(?=\s|\)|$|[.,;])'
+          score: 0.99
+        - name: Téléphone fixe avec contexte Tél
+          regex: '(?<=Tél\s*:\s*)0[1-9](?:[./\s]?\d{2,3}){3}(?=\s|\)|$|[.,;])'
+          score: 0.99
+        - name: Mobile avec contexte Tel
+          regex: '(?<=Tel\s*:\s*)04[0-9]{2}[./\s]?[0-9]{2}[./\s]?[0-9]{2}[./\s]?[0-9]{2}(?=\s|\)|$|[.,;])'
+          score: 0.99
+        - name: Mobile avec contexte Tél
+          regex: '(?<=Tél\s*:\s*)04[0-9]{2}[./\s]?[0-9]{2}[./\s]?[0-9]{2}[./\s]?[0-9]{2}(?=\s|\)|$|[.,;])'
+          score: 0.99
+        # Patterns généraux (sans contexte spécifique)
+        - name: Téléphone fixe belge
+          regex: '(?<!BCE\s*:?\s*)(?<!FR[0-9]{2}\s[0-9]{4}\s[0-9]{4}\s)\b0[1-9](?:[./\s]?\d{2,3}){3}(?=\b|\)|$|[.,;])(?!.*BCE)(?!\s[0-9A-Z]{4}\s[0-9A-Z]{3})'
+          score: 0.95
+        - name: Mobile belge
+          regex: '\b04[0-9]{2}[./\s]?[0-9]{2}[./\s]?[0-9]{2}[./\s]?[0-9]{2}(?=\b|\)|$|[.,;])'
+          score: 0.98
+        - name: International belge
+          regex: '\+32\s?[1-9](?:[./\s]?\d{2,3}){3}(?=\b|\)|$|[.,;])'
+          score: 0.99
+        - name: Numéro vert belge
+          regex: '\b0800[./\s]?[0-9]{2}[./\s]?[0-9]{3}(?=\b|\)|$|[.,;])'
+          score: 0.9
+      context:
+        [
+          "Tel",
+          "Tél",
+          "téléphone",
+          "gsm",
+          "mobile",
+          "portable",
+          "appeler",
+          "joindre",
+        ]

@@ -1,0 +1,26 @@
+# Recognizer pour documents belges
+recognizer_registry:
+  recognizers:
+    - name: BelgianIDCardRecognizer
+      supported_language: fr
+      supported_entity: CARTE_IDENTITE_BELGE
+      patterns:
+        - name: Carte d'identité belge
+          regex: "\\b[0-9]{3}\\-[0-9]{7}\\-[0-9]{2}\\b"
+          score: 0.95
+        - name: eID compact
+          regex: "\\b[0-9]{12}\\b"
+          score: 0.8
+      context: ["carte d'identité", "eID", "identiteitskaart", "pièce d'identité"]
+
+    - name: BelgianPassportRecognizer
+      supported_language: fr
+      supported_entity: PASSEPORT_BELGE
+      patterns:
+        - name: Passeport belge
+          regex: "\\b[A-Z]{2}[0-9]{6}\\b"
+          score: 0.95
+        - name: Passeport avec espaces
+          regex: "\\b[A-Z]{2}\\s[0-9]{6}\\b"
+          score: 0.9
+      context: ["passeport", "passport", "paspoort", "document de voyage"]

@@ -1,0 +1,34 @@
+# =======================
+# CONFIGURATION PRESIDIO MODULAIRE
+# =======================
+
+# Langues supportées
+supported_languages: [en, fr]
+default_language: fr
+
+# Inclusion des modules de configuration
+includes:
+  # Configuration NLP (spaCy préservée)
+  - nlp/spacy_config.yaml
+
+  # Recognizers PII par dossier (ordre important : spécifiques avant génériques)
+  - recognizers/PII/belgian/*
+  - recognizers/PII/french/*
+  - recognizers/PII/generic/*
+
+  # Recognizers Business par dossier (ordre important : spécifiques avant génériques)
+  - recognizers/Business/belgian/*
+  - recognizers/Business/french/*
+  - recognizers/Business/generic/*
+
+  # Recognizers génériques communs (en dernier)
+  - recognizers/generic/*
+
+  # Configuration d'anonymisation
+  - anonymization/*
+
+# Configuration globale simplifiée
+global_settings:
+  version: "2.0.0"
+  cache_enabled: true
+  timeout_seconds: 30

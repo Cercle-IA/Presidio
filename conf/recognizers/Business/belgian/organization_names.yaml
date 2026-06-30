@@ -1,0 +1,28 @@
+# Recognizer pour noms d'organisations belges
+recognizer_registry:
+  recognizers:
+    - name: SmartOrganizationRecognizer
+      supported_language: fr
+      supported_entity: ORGANISATION
+      patterns:
+        # Noms avec suffixes typiques d'entreprise
+        - name: Noms entreprise avec suffixes
+          regex: "\\b([A-Z][a-zA-Zà-ÿ]+(?:Consult|Tech|Soft|Digital|Solutions|Services|Group|Corp|Company|Systems|Data|Cloud|Web|Net|Info|Cyber|Smart|Pro|Expert|Plus|Max|Global|International|Europe|Belgium|Brussels|Wallonie|Flandre))\\b(?!\\s*\\([^)]*(?:BCE|TVA)[^)]*\\))"
+          score: 0.9
+
+        # Formes légales complètes avec nom d'entreprise
+        - name: Formes légales complètes
+          regex: "\\b((?:SPRL|SRL|SA|ASBL|SCS|SNC)\\s+[A-Z][a-zA-Zà-ÿ]+(?:\\s+[A-Z][a-zA-Zà-ÿ]+)*)(?!\\s*\\([^)]*(?:BCE|TVA)[^)]*\\))"
+          score: 0.95
+
+        # Noms d'entreprise avec contexte spécifique (garder pour autres cas)
+        - name: Noms avec contexte entreprise
+          regex: "(?<=\\b(?:société|entreprise)\\s+)([A-Z][a-zA-Zà-ÿ]+(?:\\s+[A-Z][a-zA-Zà-ÿ]+)*)(?!\\s*\\([^)]*(?:BCE|TVA)[^)]*\\))"
+          score: 0.85
+
+        # Noms précédés de "gérant de la"
+        - name: Noms après gérant
+          regex: "(?<=gérant\\s+de\\s+la\\s+)([A-Z][a-zA-Zà-ÿ]+(?:\\s+[A-Z][a-zA-Zà-ÿ]+)*)(?!\\s*\\([^)]*(?:BCE|TVA)[^)]*\\))"
+          score: 0.8
+
+      context: ["société", "entreprise", "gérant de la", "administrateur"]

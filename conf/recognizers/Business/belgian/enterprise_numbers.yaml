@@ -1,0 +1,23 @@
+# Recognizer pour numéros d'entreprise belges
+recognizer_registry:
+  recognizers:
+    - name: BelgianEnterpriseRecognizer
+      supported_language: fr
+      supported_entity: NUMERO_ENTREPRISE_BELGE
+      patterns:
+        - name: Numéro BCE avec deux points
+          regex: "(?<=\\bBCE\\s*:\\s*)((BE)?\\s?0\\d{3}[\\.\\s]?\\d{3}[\\.\\s]?\\d{3})\\b"
+          score: 1.0
+        - name: Numéro TVA avec deux points
+          regex: "(?<=\\bTVA\\s*:\\s*)(BE\\d{4}\\.\\d{3}\\.\\d{3})\\b"
+          score: 1.0
+        - name: Numéro d'entreprise général
+          regex: "(?<!(?:BCE|TVA)\\s*:\\s*)\\b(BE)?\\s?0\\d{3}[\\.\\s]?\\d{3}[\\.\\s]?\\d{3}\\b"
+          score: 0.9
+        - name: Numéro ONSS
+          regex: "\\bONSS\\s*:?\\s*\\d{7}\\b"
+          score: 0.95
+        - name: Numéro patronal
+          regex: "\\b(?:numéro\\s+)?patronal\\s*:?\\s*\\d{7}\\b"
+          score: 0.9
+      context: ["TVA", "intracommunautaire", "ONSS", "entreprise", "patronal"]

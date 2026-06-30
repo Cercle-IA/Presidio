@@ -1,0 +1,20 @@
+# Recognizer pour données de localisation GPS
+recognizer_registry:
+  recognizers:
+    - name: LocationGPSRecognizer
+      supported_language: fr
+      supported_entity: LOCALISATION_GPS
+      patterns:
+        - name: Coordonnées GPS décimales
+          regex: "\\b(?:lat|latitude)\\s*[=:]?\\s*[-+]?[0-9]{1,2}\\.[0-9]{4,}\\s*,?\\s*(?:lon|lng|longitude)\\s*[=:]?\\s*[-+]?[0-9]{1,3}\\.[0-9]{4,}\\b"
+          score: 0.95
+        - name: Coordonnées simples
+          regex: "\\b[-+]?[0-9]{1,2}\\.[0-9]{4,}\\s*,\\s*[-+]?[0-9]{1,3}\\.[0-9]{4,}\\b"
+          score: 0.85
+        - name: Adresse MAC
+          regex: "\\b[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}\\b"
+          score: 0.9
+        - name: Géolocalisation
+          regex: "\\b(?:géolocalisation|GPS|position)\\s*:?\\s*[-+]?[0-9]{1,3}\\.[0-9]+\\s*,\\s*[-+]?[0-9]{1,3}\\.[0-9]+\\b"
+          score: 0.9
+      context: ["GPS", "coordonnées", "latitude", "longitude", "géolocalisation", "position"]

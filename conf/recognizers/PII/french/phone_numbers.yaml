@@ -1,0 +1,20 @@
+# Recognizer pour numéros de téléphone français
+recognizer_registry:
+  recognizers:
+    - name: FrenchPhoneRecognizer
+      supported_language: fr
+      supported_entity: TELEPHONE_FRANCAIS
+      patterns:
+        - name: Téléphone français avec indicatif international
+          regex: "\\b(?:\\+33|0033|33)\\s?0?[1-9](?:[\\s\\-\\.]?[0-9]{2}){4}\\b"
+          score: 1.0
+        - name: Téléphone français format standard
+          regex: "\\b(?<!\\s)(?<!boulevard\\s)(?<!avenue\\s)(?<!rue\\s)(?<!place\\s)0[1-9](?:[\\s\\-\\.]?[0-9]{2}){4}(?![0-9])(?!\\s[A-Za-z])(?!\\s[A-Z][a-z])\\b"
+          score: 0.85
+        - name: Mobile français
+          regex: "\\b(?<!boulevard\\s)(?<!avenue\\s)(?<!rue\\s)(?<!place\\s)(?:(?:\\+33|0033|33)\\s?0?[67]|0[67])(?:[\\s\\-\\.]?[0-9]{2}){4}(?![0-9])(?!\\s[A-Za-z])(?!\\s[A-Z][a-z])\\b"
+          score: 0.95
+        - name: Téléphone avec parenthèses
+          regex: "\\b\\(0[1-9]\\)(?:[\\s\\-\\.]?[0-9]{2}){4}\\b"
+          score: 0.9
+      context: ["téléphone", "tél", "mobile", "portable", "fixe", "numéro"]

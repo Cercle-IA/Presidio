@@ -1,0 +1,20 @@
+# Recognizer pour numéros de TVA belges
+recognizer_registry:
+  recognizers:
+    - name: BelgianVATRecognizer
+      supported_language: fr
+      supported_entity: TVA_BELGE
+      patterns:
+        - name: TVA belge format standard
+          regex: "\\bBE[0-9]{4}\\.[0-9]{3}\\.[0-9]{3}\\b"
+          score: 1.0
+        - name: TVA belge compact
+          regex: "\\bBE[0-9]{10}\\b"
+          score: 0.95
+        - name: TVA avec contexte
+          regex: "\\b(?:TVA|tva)\\s*:?\\s*BE[0-9]{4}\\.[0-9]{3}\\.[0-9]{3}\\b"
+          score: 1.0
+        - name: Numéro d'entreprise BCE
+          regex: "\\b(?:BCE|bce)\\s*:?\\s*BE[0-9]{4}\\.[0-9]{3}\\.[0-9]{3}\\b"
+          score: 1.0
+      context: ["TVA", "BCE", "numéro d'entreprise", "identification", "intracommunautaire"]

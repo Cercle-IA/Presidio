@@ -1,0 +1,39 @@
+# Recognizer pour numéros de carte de crédit
+recognizer_registry:
+  recognizers:
+    - name: CreditCardRecognizer
+      supported_language: fr
+      supported_entity: CREDIT_CARD
+      patterns:
+        - name: Visa
+          regex: "\\b4[0-9]{3}\\s?[0-9]{4}\\s?[0-9]{4}\\s?[0-9]{4}\\b"
+          score: 1.0
+        - name: Mastercard
+          regex: "\\b5[1-5][0-9]{2}\\s?[0-9]{4}\\s?[0-9]{4}\\s?[0-9]{4}\\b"
+          score: 1.0
+        - name: American Express
+          regex: "\\b3[47][0-9]{2}\\s?[0-9]{6}\\s?[0-9]{5}\\b"
+          score: 1.0
+        - name: Carte générique 16 chiffres
+          regex: "\\b(?<!FR[0-9]{2}\\s)[0-9]{4}\\s?[0-9]{4}\\s?[0-9]{4}\\s?[0-9]{4}(?!\\s[0-9A-Z]{4}\\s[0-9A-Z]{3})\\b"
+          score: 0.7
+        - name: Carte générique 15 chiffres
+          regex: "\\b[0-9]{4}\\s?[0-9]{6}\\s?[0-9]{5}\\b"
+          score: 0.7
+        - name: Carte avec contexte
+          regex: "\\b(?:carte|card|numéro de carte)\\s*:?\\s*([0-9]{4}\\s?[0-9]{4}\\s?[0-9]{4}\\s?[0-9]{4})\\b"
+          score: 0.9
+        - name: Carte masquée
+          regex: "\\b[0-9]{4}\\s?[*X]{4}\\s?[*X]{4}\\s?[0-9]{4}\\b"
+          score: 0.8
+      context:
+        [
+          "carte",
+          "credit",
+          "crédit",
+          "visa",
+          "mastercard",
+          "amex",
+          "paiement",
+          "CB",
+        ]

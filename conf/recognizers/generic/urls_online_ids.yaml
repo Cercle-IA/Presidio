@@ -1,0 +1,19 @@
+# Recognizer pour URLs et identifiants en ligne
+recognizer_registry:
+  recognizers:
+    - name: URLOnlineIDRecognizer
+      supported_language: fr
+      supported_entity: URL_IDENTIFIANT
+      patterns:
+        - name: URL complète
+          regex: "\\bhttps?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(?:/[^\\s]*)?\\b"
+          score: 0.95
+
+        - name: Identifiant utilisateur
+          regex: "\\b(?:user:|username:)\\s*[a-zA-Z0-9._-]{3,20}\\b"
+          score: 0.85
+        - name: Cookie ID
+          regex: "\\b(?:cookie|session)\\s*[=:]\\s*[A-Za-z0-9+/=]{16,}\\b"
+          score: 0.9
+      context:
+        ["URL", "lien", "site", "utilisateur", "connexion", "session"]

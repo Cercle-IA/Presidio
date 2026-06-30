@@ -1,0 +1,25 @@
+# Recognizer pour numéro de registre national belge
+recognizer_registry:
+  recognizers:
+    - name: BelgianNRNRecognizer
+      supported_language: fr
+      supported_entity: REGISTRE_NATIONAL_BELGE
+      patterns:
+        - name: NRN avec points et tiret
+          regex: "\\b[0-9]{2}\\.[0-9]{2}\\.[0-9]{2}-[0-9]{3}\\.[0-9]{2}\\b"
+          score: 1.0
+        - name: NRN compact
+          regex: "\\b[0-9]{11}\\b"
+          score: 0.7
+        - name: NRN avec espaces
+          regex: "\\b[0-9]{2}\\s[0-9]{2}\\s[0-9]{2}\\s[0-9]{3}\\s[0-9]{2}\\b"
+          score: 0.8
+      context:
+        [
+          "registre national",
+          "numéro national",
+          "NN",
+          "RN",
+          "identité",
+          "carte d'identité",
+        ]

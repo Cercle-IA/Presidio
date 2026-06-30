@@ -1,0 +1,45 @@
+# Recognizer pour documents d'identité français
+recognizer_registry:
+  recognizers:
+    - name: FrenchIDCardRecognizer
+      supported_language: fr
+      supported_entity: CARTE_IDENTITE_FRANCAISE
+      patterns:
+        - name: Numéro CNI nouveau format (9 chiffres)
+          regex: "\\b[0-9]{9}\\b"
+          score: 0.98
+        - name: Numéro CNI ancien format (12 chiffres)
+          regex: "\\b[0-9]{12}\\b"
+          score: 0.95
+        - name: Numéro CNI avec espaces (nouveau)
+          regex: "\\b[0-9]{3}\\s[0-9]{3}\\s[0-9]{3}\\b"
+          score: 0.99
+        - name: Numéro CNI avec espaces (ancien)
+          regex: "\\b[0-9]{4}\\s[0-9]{4}\\s[0-9]{4}\\b"
+          score: 0.9
+      context:
+        ["carte d'identité", "CNI", "pièce d'identité", "numéro d'identité"]
+
+    - name: FrenchPassportRecognizer
+      supported_language: fr
+      supported_entity: PASSEPORT_FRANCAIS
+      patterns:
+        - name: Numéro de passeport français
+          regex: "\\b[0-9]{2}[A-Z]{2}[0-9]{5}\\b"
+          score: 0.95
+        - name: Passeport avec espaces
+          regex: "\\b[0-9]{2}\\s[A-Z]{2}\\s[0-9]{5}\\b"
+          score: 0.9
+      context: ["passeport", "passport", "document de voyage"]
+
+    - name: FrenchDriverLicenseRecognizer
+      supported_language: fr
+      supported_entity: PERMIS_CONDUIRE_FRANCAIS
+      patterns:
+        - name: Permis de conduire français
+          regex: "\\b[0-9]{12}\\b"
+          score: 0.8
+        - name: Permis avec format
+          regex: "\\b(?:permis\\s+(?:de\\s+)?conduire\\s*:?\\s*)?[0-9]{4}\\s?[0-9]{4}\\s?[0-9]{4}\\b"
+          score: 0.9
+      context: ["permis de conduire", "permis", "conduire", "licence"]

@@ -1,0 +1,44 @@
+# Recognizer pour adresses belges complètes
+recognizer_registry:
+  recognizers:
+    - name: BelgianAddressRecognizer
+      supported_language: fr
+      supported_entity: ADRESSE_BELGE
+      patterns:
+        # Pattern principal : numéro + rue + code postal + ville (SANS contexte)
+        - name: Adresse complète avec numéro devant
+          regex: "\\b\\d{1,4}[A-Za-z]?\\s+(?:Avenue|Rue|Boulevard|Chaussée|Place|Quai|Impasse|Drève|Clos|Allée)\\s+(?:de\\s+la\\s+|de\\s+|du\\s+|des\\s+|d'|la\\s+|le\\s+)?[A-ZÀ-Ÿ][a-zà-ÿ'-]+(?:\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+)*\\s*,\\s*[1-9]\\d{3}\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+(?:\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+)*"
+          score: 1.0
+
+        # Pattern avec lookbehind positif pour exclure "demeurant" de la capture
+        - name: Adresse après contexte demeurant
+          regex: "(?<=\\bdemeurant\\s)\\d{1,4}[A-Za-z]?\\s+(?:Avenue|Rue|Boulevard|Chaussée|Place|Quai|Impasse|Drève|Clos|Allée)\\s+(?:de\\s+la\\s+|de\\s+|du\\s+|des\\s+|d'|la\\s+|le\\s+)?[A-ZÀ-Ÿ][a-zà-ÿ'-]+(?:\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+)*\\s*,\\s*[1-9]\\d{3}\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+(?:\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+)*"
+          score: 1.0
+
+        # Pattern avec lookbehind pour autres contextes
+        - name: Adresse après contexte résidant
+          regex: "(?<=\\b(?:résidant|domicilié|habite|situé)\\s)\\d{1,4}[A-Za-z]?\\s+(?:Avenue|Rue|Boulevard|Chaussée|Place|Quai|Impasse|Drève|Clos|Allée)\\s+(?:de\\s+la\\s+|de\\s+|du\\s+|des\\s+|d'|la\\s+|le\\s+)?[A-ZÀ-Ÿ][a-zà-ÿ'-]+(?:\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+)*\\s*,\\s*[1-9]\\d{3}\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+(?:\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+)*"
+          score: 1.0
+
+        # Pattern avec lookbehind pour contexte bureaux
+        - name: Adresse après contexte bureaux
+          regex: "(?<=\\b(?:dans les bureaux situés|siège social situé)\\s)\\d{1,4}[A-Za-z]?\\s+(?:Avenue|Rue|Boulevard|Chaussée|Place|Quai|Impasse|Drève|Clos|Allée)\\s+(?:de\\s+la\\s+|de\\s+|du\\s+|des\\s+|d'|la\\s+|le\\s+)?[A-ZÀ-Ÿ][a-zà-ÿ'-]+(?:\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+)*\\s*,\\s*[1-9]\\d{3}\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+(?:\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+)*"
+          score: 0.9
+
+        # Pattern alternatif : rue + numéro + ville (format classique)
+        - name: Adresse format classique
+          regex: "\\b(?:Avenue|Rue|Boulevard|Chaussée|Place|Quai|Impasse|Drève|Clos|Allée)\\s+(?:de\\s+la\\s+|de\\s+|du\\s+|des\\s+|d'|la\\s+|le\\s+)?[A-ZÀ-Ÿ][a-zà-ÿ'-]+(?:\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+)*(?:\\s*,?\\s*\\d{1,4}[A-Za-z]?)?\\s*,\\s*[1-9]\\d{3}\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+(?:\\s+[A-ZÀ-Ÿ][a-zà-ÿ'-]+)*"
+          score: 0.8
+
+      context:
+        [
+          "demeurant",
+          "résidant",
+          "domicilié",
+          "habite",
+          "situé au",
+          "sis à",
+          "dans les bureaux situés",
+          "siège social",
+          "adresse",
+        ]
