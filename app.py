@@ -350,10 +350,15 @@ def anonymize_text():
 
         logger.info(f"🔍 Résultat anonymisation: '{anonymized_result.text}'")
 
+        # item.start = original start position, but item.end = start + len(replacement)
+        # so we must look up the true end from filtered_results to get the correct original text
+        start_to_result = {result.start: result for result in filtered_results}
         replacement_map = {}
         for item in anonymized_result.items:
-            original_text = text_to_anonymize[item.start:item.end]
-            replacement_map[original_text] = item.text
+            original_result = start_to_result.get(item.start)
+            if original_result:
+                original_text = text_to_anonymize[original_result.start:original_result.end]
+                replacement_map[original_text] = item.text
 
         logger.info(f"🔍 Replacement map: {replacement_map}")
 
