@@ -8,6 +8,7 @@ from presidio_analyzer import AnalyzerEngineProvider
 from config_loader import ConfigLoader
 from presidio_anonymizer import AnonymizerEngine
 from presidio_anonymizer.entities import OperatorConfig
+from presidio_anonymizer.operators import OperatorType
 from entity_refiners import EntityRefinerManager
 from pipeline_manager import AnalysisPipeline
 from operators.market_share_operator import MarketShareRangeOperator
@@ -350,15 +351,26 @@ def anonymize_text():
 
         logger.info(f"🔍 Résultat anonymisation: '{anonymized_result.text}'")
 
-        # item.start = original start position, but item.end = start + len(replacement)
-        # so we must look up the true end from filtered_results to get the correct original text
-        start_to_result = {result.start: result for result in filtered_results}
+        # Build replacement_map by applying operators directly to each entity text.
+        # OperatorResult.start/end are positions in the OUTPUT text (not input),
+        # so position-based matching is unreliable. Applying operators ourselves
+        # gives exact original→replacement pairs with no index ambiguity.
         replacement_map = {}
-        for item in anonymized_result.items:
-            original_result = start_to_result.get(item.start)
-            if original_result:
-                original_text = text_to_anonymize[original_result.start:original_result.end]
-                replacement_map[original_text] = item.text
+        for result in filtered_results:
+            original_text = text_to_anonymize[result.start:result.end]
+            op_config = operators_to_use.get(result.entity_type) or operators_to_use.get("DEFAULT")
+            if not op_config:
+                replacement_map[original_text] = f"[{result.entity_type}]"
+                continue
+            try:
+                operator = anonymizer.operators_factory.create_operator_class(
+                    op_config.operator_name, OperatorType.Anonymize
+                )
+                params = {**op_config.params, "entity_type": result.entity_type}
+                replacement_map[original_text] = operator.operate(text=original_text, params=params)
+            except Exception as e:
+                logger.warning(f"⚠️ Operator {op_config.operator_name} failed for {result.entity_type}: {e}")
+                replacement_map[original_text] = f"[{result.entity_type}]"
 
         logger.info(f"🔍 Replacement map: {replacement_map}")
 
