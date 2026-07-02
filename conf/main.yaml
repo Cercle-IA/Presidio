@@ -6,6 +6,17 @@
 supported_languages: [en, fr]
 default_language: fr
 
+# Seuil de score minimal pour qu'une entité soit retenue après enrichissement
+# contextuel. Certains patterns (turnover.yaml, market_share.yaml) sont
+# volontairement notés à un score bas (0.30) et commentés "requiert boost
+# contextuel" : ils ne sont censés survivre que si un mot-clé de contexte
+# proche les fait remonter au-dessus de ce seuil (Presidio applique un boost
+# de +0.35 par défaut). Sans ce seuil, ils passaient malgré tout (défaut
+# Presidio = 0), et pareil pour tout pattern générique à score modéré sans
+# contexte réel (ex: un code postal générique matchant n'importe quel nombre
+# à 4 chiffres, y compris une année).
+default_score_threshold: 0.35
+
 # Inclusion des modules de configuration
 includes:
   # Configuration NLP (spaCy préservée)
