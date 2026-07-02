@@ -301,13 +301,11 @@ def anonymize_text():
 
         logger.info(f"🔍 Texte à anonymiser: '{text_to_anonymize}'")
 
-        entities_to_detect = get_entities_by_mode(mode) if 'get_entities_by_mode' in globals() else None
-
-        analyzer_results = analyzer.analyze(
+        raw_results = analyzer.analyze(
             text=text_to_anonymize,
-            language=language,
-            entities=entities_to_detect
+            language=language
         )
+        analyzer_results = filter_by_category(raw_results, mode)
 
         logger.info(f"🔍 Entités détectées: {[(r.entity_type, text_to_anonymize[r.start:r.end], r.score) for r in analyzer_results]}")
 
