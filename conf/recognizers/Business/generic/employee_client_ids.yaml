@@ -6,10 +6,10 @@ recognizer_registry:
       supported_entity: ID_PROFESSIONNEL_BELGE
       patterns:
         - name: Matricule employé
-          regex: "\\b(?:matricule|employee|emp)\\s*:?\\s*[A-Z0-9]{4,10}\\b"
+          regex: "\\b(?:matricule|employee|emp)\\s*:?\\s*(?-i:[A-Z0-9]){4,10}\\b"
           score: 0.95
         - name: ID client
-          regex: "\\b(?:client|customer)\\s*ID\\s*:?\\s*[A-Z0-9]{4,12}\\b"
+          regex: "\\b(?:client|customer)\\s*ID\\s*:?\\s*(?-i:[A-Z0-9]){4,12}\\b"
           score: 0.95
         - name: Code utilisateur
           regex: "\\b(?:user|utilisateur)\\s*:?\\s*[a-z]+\\.[a-z]+\\b"

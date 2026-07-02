@@ -6,22 +6,22 @@ recognizer_registry:
       supported_entity: SOCIETE_BELGE
       patterns:
         - name: SRL avec nom
-          regex: "\\b(?:SRL|Srl)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          regex: "\\b(?:SRL|Srl)\\s+(?-i:[A-ZÀ-Ÿ])[a-zà-ÿ\\s&'-]+\\b"
           score: 0.95
         - name: SA avec nom
-          regex: "\\b(?:SA|Sa)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          regex: "\\b(?:SA|Sa)\\s+(?-i:[A-ZÀ-Ÿ])[a-zà-ÿ\\s&'-]+\\b"
           score: 0.95
         - name: ASBL avec nom
-          regex: "\\b(?:ASBL|Asbl)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          regex: "\\b(?:ASBL|Asbl)\\s+(?-i:[A-ZÀ-Ÿ])[a-zà-ÿ\\s&'-]+\\b"
           score: 0.95
         - name: SC avec nom
-          regex: "\\b(?:SC|Sc)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          regex: "\\b(?:SC|Sc)\\s+(?-i:[A-ZÀ-Ÿ])[a-zà-ÿ\\s&'-]+\\b"
           score: 0.9
         - name: SNC avec nom
-          regex: "\\b(?:SNC|Snc)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          regex: "\\b(?:SNC|Snc)\\s+(?-i:[A-ZÀ-Ÿ])[a-zà-ÿ\\s&'-]+\\b"
           score: 0.9
         - name: SComm avec nom
-          regex: "\\b(?:SComm|Scomm)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          regex: "\\b(?:SComm|Scomm)\\s+(?-i:[A-ZÀ-Ÿ])[a-zà-ÿ\\s&'-]+\\b"
           score: 0.9
       context:
         [

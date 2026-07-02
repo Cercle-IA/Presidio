@@ -12,6 +12,6 @@ recognizer_registry:
           regex: "\\b(?:VIH|SIDA|cancer|diabète|dépression|schizophrénie|bipolarité|addiction)\\b"
           score: 0.95
         - name: Professionnels de santé
-          regex: "\\b(?:Dr|Docteur|Médecin|Infirmier|Psychiatre|Psychologue)\\s+[A-Z][a-z]+\\b"
+          regex: "\\b(?:Dr|Docteur|Médecin|Infirmier|Psychiatre|Psychologue)\\s+(?-i:[A-Z])[a-z]+\\b"
           score: 0.9
       context: ["santé", "médical", "hôpital", "clinique", "patient", "dossier médical"]

@@ -6,18 +6,18 @@ recognizer_registry:
       supported_entity: SOCIETE_FRANCAISE
       patterns:
         - name: SARL avec nom
-          regex: "\\b(?:SARL|Sarl)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          regex: "\\b(?:SARL|Sarl)\\s+(?-i:[A-ZÀ-Ÿ])[a-zà-ÿ\\s&'-]+\\b"
           score: 0.95
         - name: SAS avec nom
-          regex: "\\b(?:SAS|Sas)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          regex: "\\b(?:SAS|Sas)\\s+(?-i:[A-ZÀ-Ÿ])[a-zà-ÿ\\s&'-]+\\b"
           score: 0.95
         - name: SA avec nom
-          regex: "\\b(?:SA|Sa)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          regex: "\\b(?:SA|Sa)\\s+(?-i:[A-ZÀ-Ÿ])[a-zà-ÿ\\s&'-]+\\b"
           score: 0.9
         - name: EURL avec nom
-          regex: "\\b(?:EURL|Eurl)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          regex: "\\b(?:EURL|Eurl)\\s+(?-i:[A-ZÀ-Ÿ])[a-zà-ÿ\\s&'-]+\\b"
           score: 0.95
         - name: SCI avec nom
-          regex: "\\b(?:SCI|Sci)\\s+[A-ZÀ-Ÿ][a-zà-ÿ\\s&'-]+\\b"
+          regex: "\\b(?:SCI|Sci)\\s+(?-i:[A-ZÀ-Ÿ])[a-zà-ÿ\\s&'-]+\\b"
           score: 0.9
       context: ["société", "entreprise", "forme juridique", "statut", "commercial"]

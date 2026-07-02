@@ -56,7 +56,15 @@ class OverlapResolver:
             'URL_IDENTIFIANT': 35,
             'MARKET_SHARE': 35,
             'MONTANT_FINANCIER': 45,
-            'CHIFFRE_AFFAIRES': 45,
+            # +2 par rapport à MONTANT_FINANCIER : le motif contextuel de
+            # turnover.yaml ("montant + mot-clé CA") a un score Presidio de
+            # 0.90, contre 0.95 pour le motif générique "montant + €" de
+            # financial_amounts.yaml. Une priorité strictement égale ferait
+            # gagner MONTANT_FINANCIER même sur un vrai chiffre d'affaires
+            # bien contextualisé (0.90 < 0.95). +2 point suffit à inverser ce
+            # cas tout en laissant MONTANT_FINANCIER gagner face au motif de
+            # repli faible de CHIFFRE_AFFAIRES (score 0.30, non contextualisé).
+            'CHIFFRE_AFFAIRES': 47,
             'REFERENCE_CONTRAT': 40,
             'CLE_API_SECRETE': 90,
         }

@@ -12,7 +12,7 @@ recognizer_registry:
           regex: "\\b(?:France|Belgique|Suisse|Canada|Allemagne|Italie|Espagne|Portugal|Royaume-Uni|États-Unis|Maroc|Algérie|Tunisie|Sénégal|Côte d'Ivoire|Mali|Burkina Faso|Niger|Tchad|République centrafricaine|Cameroun|Gabon|République démocratique du Congo|Madagascar|Maurice|Seychelles|Comores|Djibouti|Vanuatu|Nouvelle-Calédonie|Polynésie française|Wallis-et-Futuna|Saint-Pierre-et-Miquelon|Mayotte|Guyane|Martinique|Guadeloupe|La Réunion)\\b"
           score: 0.85
         - name: Lieu de naissance
-          regex: "\\b(?:né|née|naissance)\\s+(?:à|au|aux|en|dans)\\s+([A-ZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ][a-zàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþß'-]+(?:[\\s-][A-Za-zàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþß'-]+)*)\\b"
+          regex: "\\b(?:né|née|naissance)\\s+(?:à|au|aux|en|dans)\\s+((?-i:[A-ZÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ])[a-zàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþß'-]+(?:[\\s-][A-Za-zàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþß'-]+)*)\\b"
           score: 0.95
         - name: Région française
           regex: "\\b(?:Île-de-France|Auvergne-Rhône-Alpes|Hauts-de-France|Nouvelle-Aquitaine|Occitanie|Grand Est|Provence-Alpes-Côte d'Azur|Pays de la Loire|Bretagne|Normandie|Bourgogne-Franche-Comté|Centre-Val de Loire|Corse)\\b"

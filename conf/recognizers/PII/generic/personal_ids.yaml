@@ -6,7 +6,7 @@ recognizer_registry:
       supported_entity: IDENTIFIANT_PERSONNEL
       patterns:
         - name: Numéro d'identité générique
-          regex: "\\b(?:ID|identifiant|matricule|numéro)\\s*:?\\s*[A-Z0-9]{6,15}\\b"
+          regex: "\\b(?:ID|identifiant|matricule|numéro)\\s*:?\\s*(?-i:[A-Z0-9]){6,15}\\b"
           score: 0.8
 
       context: ["identifiant", "matricule", "référence", "code", "numéro ID"]
