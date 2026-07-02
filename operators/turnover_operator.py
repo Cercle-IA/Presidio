@@ -58,34 +58,23 @@ def _extract_currency(text: str) -> str:
     return (m.group(1) or m.group(2)) if m else ''
 
 
-def _rounding_step(value: float) -> int:
-    """Return a rounding step proportional to the magnitude of value.
-
-    Examples:
-        1 000 000  → 100 000  (10^5)
-          500 000  →  10 000  (10^4)
-          100 000  →  10 000  (10^4)
-           10 000  →   1 000  (10^3)
-    """
-    exp = math.floor(math.log10(abs(value))) - 1
-    return max(1, int(10 ** exp))
-
-
 def _fmt(n: int) -> str:
     """Format integer with space as thousands separator: 1000000 → '1 000 000'."""
     return f"{n:,}".replace(",", " ")
 
 
 class TurnoverRangeOperator(Operator):
-    """Replace a turnover / revenue amount with a ±10% range (total width 20%).
+    """Replace a turnover / revenue amount with an exact ±10% range (total width 20%).
 
-    Bounds are rounded outward (floor/ceil) to the nearest magnitude-appropriate step.
+    Bounds are floor/ceil-ed to the nearest integer only, to absorb float
+    precision noise — no rounding to a "clean" magnitude step, so the range
+    always reflects exactly ±10% of the parsed value.
 
     Examples:
         '1 000 000 EUR'              → '[900 000 - 1 100 000] EUR'
         '5M EUR'                     → '[4 500 000 - 5 500 000] EUR'
         '500K €'                     → '[450 000 - 550 000] €'
-        '1,5M EUR'                   → '[1 300 000 - 1 700 000] EUR'
+        '1,5M EUR'                   → '[1 350 000 - 1 650 000] EUR'
         'chiffre d affaires de 2M'   → '[1 800 000 - 2 200 000]'
         'pas de montant'             → '[CHIFFRE_AFFAIRES]'
     """
@@ -96,10 +85,8 @@ class TurnoverRangeOperator(Operator):
             return "[CHIFFRE_AFFAIRES]"
 
         margin = value * 0.10
-        step = _rounding_step(value)
-
-        low = int(math.floor((value - margin) / step)) * step
-        high = int(math.ceil((value + margin) / step)) * step
+        low = int(math.floor(value - margin))
+        high = int(math.ceil(value + margin))
 
         suffix = f" {currency}" if currency else ""
         return f"[{_fmt(low)} - {_fmt(high)}]{suffix}"

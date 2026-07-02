@@ -37,22 +37,22 @@ class TestTurnoverRangeOperator:
         assert op.operate("500 000 EUR") == "[450 000 - 550 000] EUR"
 
     def test_100k(self, op):
-        """100 000 EUR → step 10 000 → [90 000 - 110 000] EUR"""
+        """100 000 EUR → ±10% exact → [90 000 - 110 000] EUR"""
         assert op.operate("100 000 EUR") == "[90 000 - 110 000] EUR"
 
     def test_10k(self, op):
-        """10 000 EUR → step 1 000 → [9 000 - 11 000] EUR"""
+        """10 000 EUR → ±10% exact → [9 000 - 11 000] EUR"""
         assert op.operate("10 000 EUR") == "[9 000 - 11 000] EUR"
 
-    # --- Arrondi outward sur les valeurs non rondes ---
+    # --- Valeurs non rondes : la fourchette reste un ±10% exact ---
 
-    def test_1_5m_rounds_outward(self, op):
-        """1,5M EUR: ±10% = [1 350 000; 1 650 000], step 100 000 → [1 300 000 - 1 700 000]"""
-        assert op.operate("1,5M EUR") == "[1 300 000 - 1 700 000] EUR"
+    def test_1_5m_exact_margin(self, op):
+        """1,5M EUR: ±10% exact = [1 350 000 - 1 650 000]"""
+        assert op.operate("1,5M EUR") == "[1 350 000 - 1 650 000] EUR"
 
     def test_1_5m_dot_decimal(self, op):
         """1.5M (point comme séparateur décimal) identique à virgule"""
-        assert op.operate("1.5M EUR") == "[1 300 000 - 1 700 000] EUR"
+        assert op.operate("1.5M EUR") == "[1 350 000 - 1 650 000] EUR"
 
     # --- Montant dans une phrase (le keyword est inclus dans le span) ---
 
@@ -72,7 +72,7 @@ class TestTurnoverRangeOperator:
 
     def test_decimal_comma(self, op):
         """1 500 000,00 EUR (virgule décimale française)"""
-        assert op.operate("1 500 000,00 EUR") == "[1 300 000 - 1 700 000] EUR"
+        assert op.operate("1 500 000,00 EUR") == "[1 350 000 - 1 650 000] EUR"
 
     # --- Fallback ---
 
