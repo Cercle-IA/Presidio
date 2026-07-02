@@ -27,11 +27,13 @@ class LocationAddressRule:
     def __init__(self):
         self.insignificant_terms = {'le', 'la', 'les', 'de', 'du', 'des', 'à', 'au', 'aux'}
     
+    ADDRESS_TYPES = {'ADRESSE', 'ADRESSE_BELGE', 'ADRESSE_FRANCAISE'}
+
     def apply(self, results: List[RecognizerResult], text: str) -> List[RecognizerResult]:
-        """Supprime les LOCATION qui sont des doublons d'ADDRESS"""
+        """Supprime les LOCATION qui sont des doublons d'une adresse"""
         locations = [r for r in results if r.entity_type == 'LOCATION']
-        addresses = [r for r in results if r.entity_type == 'ADDRESS']
-        others = [r for r in results if r.entity_type not in ['LOCATION', 'ADDRESS']]
+        addresses = [r for r in results if r.entity_type in self.ADDRESS_TYPES]
+        others = [r for r in results if r.entity_type != 'LOCATION' and r.entity_type not in self.ADDRESS_TYPES]
         
         filtered_locations = []
         for location in locations:

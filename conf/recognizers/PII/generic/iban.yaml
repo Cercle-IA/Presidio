@@ -12,13 +12,16 @@ recognizer_registry:
           regex: "\\bBE[0-9]{2}\\s?[0-9]{4}\\s?[0-9]{4}\\s?[0-9]{4}\\b"
           score: 1.0
         - name: IBAN générique européen
-          regex: "\\b[A-Z]{2}[0-9]{2}\\s?(?:[A-Z0-9]{4}\\s?){2,7}[A-Z0-9]{1,4}\\b"
+          # Presidio compile les regex avec re.IGNORECASE par défaut : sans le
+          # groupe (?-i:...), [A-Z0-9] matche aussi les minuscules environnantes
+          # et le pattern avale des mots du texte qui suivent l'IBAN.
+          regex: "\\b(?-i:[A-Z]{2})[0-9]{2}\\s?(?:(?-i:[A-Z0-9]){4}\\s?){2,7}(?-i:[A-Z0-9]){1,4}\\b"
           score: 0.9
         - name: IBAN compact
-          regex: "\\b[A-Z]{2}[0-9]{2}[A-Z0-9]{12,30}\\b"
+          regex: "\\b(?-i:[A-Z]{2})[0-9]{2}(?-i:[A-Z0-9]){12,30}\\b"
           score: 0.85
         - name: IBAN avec contexte
-          regex: "\\b(?:IBAN|iban)\\s*:?\\s*([A-Z]{2}[0-9]{2}\\s?(?:[A-Z0-9]{4}\\s?){2,7}[A-Z0-9]{1,4})\\b"
+          regex: "\\b(?:IBAN|iban)\\s*:?\\s*((?-i:[A-Z]{2})[0-9]{2}\\s?(?:(?-i:[A-Z0-9]){4}\\s?){2,7}(?-i:[A-Z0-9]){1,4})\\b"
           score: 0.95
       context:
         [

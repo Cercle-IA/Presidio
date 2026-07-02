@@ -25,10 +25,10 @@ recognizer_registry:
       supported_entity: PASSEPORT_FRANCAIS
       patterns:
         - name: Numéro de passeport français
-          regex: "\\b[0-9]{2}[A-Z]{2}[0-9]{5}\\b"
+          regex: "\\b[0-9]{2}(?-i:[A-Z]{2})[0-9]{5}\\b"
           score: 0.95
         - name: Passeport avec espaces
-          regex: "\\b[0-9]{2}\\s[A-Z]{2}\\s[0-9]{5}\\b"
+          regex: "\\b[0-9]{2}\\s(?-i:[A-Z]{2})\\s[0-9]{5}\\b"
           score: 0.9
       context: ["passeport", "passport", "document de voyage"]
 

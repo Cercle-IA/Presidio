@@ -13,34 +13,52 @@ class OverlapResolver:
     
     def __init__(self):
         # Ordre de priorité (plus haut = plus prioritaire)
+        # IMPORTANT : ces clés doivent correspondre exactement aux `supported_entity`
+        # définis dans conf/recognizers/**/*.yaml, pas à des noms génériques Presidio.
+        # Une clé qui ne matche aucune entité réelle retombe sur la priorité par
+        # défaut (0) dans get_priority_score(), ce qui la fait perdre systématiquement
+        # face à n'importe quelle autre entité chevauchante.
         self.priority_order = {
             'IBAN': 100,
             'CREDIT_CARD': 95,
-            'EMAIL_ADDRESS': 90,
-            'BE_ENTERPRISE_NUMBER': 88,  
-            'PHONE_NUMBER': 85,
-            'BE_PHONE_NUMBER': 85,
+            'ADRESSE_EMAIL': 90,
+            'NUMERO_ENTREPRISE_BELGE': 88,
+            'TVA_BELGE': 88,
+            'TVA_FRANCAISE': 88,
+            'NUMERO_FISCAL_FRANCAIS': 88,
+            'SIRET_SIREN_FRANCAIS': 88,
             'TELEPHONE': 84,
+            'TELEPHONE_BELGE': 85,
             'TELEPHONE_FRANCAIS': 86,
-            'IP_ADDRESS': 82,
+            'ADRESSE_IP': 82,
+            'DATE': 80,
+            'DATE_TIME': 80,
+            'TITRE_CIVILITE': 85,
+            'DONNEES_PROFESSIONNELLES': 80,
+            'ID_PROFESSIONNEL_BELGE': 72,
             'ADRESSE_FRANCAISE': 78,  # Priorité plus élevée pour adresses françaises spécifiques
-            'BE_ADDRESS': 75,
-            'FR_ADDRESS': 75,
+            'ADRESSE_BELGE': 75,
             'ADRESSE': 70,  # Adresse générique avec priorité plus faible
             'ORGANISATION': 65,
+            'SOCIETE_BELGE': 65,
+            'SOCIETE_FRANCAISE': 65,
             'LOCATION': 60,  # Priorité plus faible que les adresses
-            'PERSON': 50,
-            'PERSON_NAME': 45,
+            'PERSONNE': 50,
             'NRP': 40,
-            'BE_PROFESSIONAL_ID': 40,
-            'FR_CIVILITY_TITLE': 85,
-            'FR_REGULATED_PROFESSION': 80,
             'CARTE_IDENTITE_FRANCAISE': 78,
+            'CARTE_IDENTITE_BELGE': 78,
             'PERMIS_CONDUIRE_FRANCAIS': 76,
             'PASSEPORT_FRANCAIS': 77,
-            'URL': 35,
+            'PASSEPORT_BELGE': 77,
+            'REGISTRE_NATIONAL_BELGE': 77,
+            'NUMERO_SECURITE_SOCIALE_FRANCAIS': 77,
+            'COMPTE_BANCAIRE_FRANCAIS': 77,
+            'URL_IDENTIFIANT': 35,
             'MARKET_SHARE': 35,
-            'CHIFFRE_AFFAIRES': 50,
+            'MONTANT_FINANCIER': 45,
+            'CHIFFRE_AFFAIRES': 45,
+            'REFERENCE_CONTRAT': 40,
+            'CLE_API_SECRETE': 90,
         }
         
         # Patterns pour identifier les organisations
@@ -87,23 +105,23 @@ class OverlapResolver:
         while i < len(sorted_results):
             current = sorted_results[i]
             overlapping_group = [current]
-            
-            # Trouver tous les chevauchements avec l'entité courante
+            # Borne de fin du groupe, étendue au fur et à mesure qu'on y ajoute
+            # des entités. Comparer uniquement à `current` casse la transitivité :
+            # une chaîne A-B, B-C (mais pas A-C) ne serait jamais fusionnée en un
+            # seul groupe, laissant plusieurs "gagnants" qui se chevauchent
+            # réellement survivre côte à côte.
+            group_end = current.end
+
             j = i + 1
-            while j < len(sorted_results):
-                if self._is_overlapping(current, sorted_results[j]):
-                    overlapping_group.append(sorted_results[j])
-                    j += 1
-                elif sorted_results[j].start >= current.end:
-                    # Plus de chevauchement possible
-                    break
-                else:
-                    j += 1
-            
+            while j < len(sorted_results) and sorted_results[j].start < group_end:
+                overlapping_group.append(sorted_results[j])
+                group_end = max(group_end, sorted_results[j].end)
+                j += 1
+
             # Résoudre le groupe de chevauchements
             if len(overlapping_group) > 1:
-                winner = self._resolve_overlap_group(overlapping_group, text)
-                resolved_results.append(winner)
+                winners = self._resolve_overlap_group(overlapping_group, text)
+                resolved_results.extend(winners)
                 # Avancer l'index pour éviter de retraiter les entités du groupe
                 i = j
             else:
@@ -198,25 +216,29 @@ class OverlapResolver:
         ip_pattern = r'\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b'
         return bool(re.search(ip_pattern, text))
     
-    def _is_overlapping(self, entity1: RecognizerResult, entity2: RecognizerResult) -> bool:
+    def _resolve_overlap_group(self, overlapping_entities: List[RecognizerResult], text: str = "") -> List[RecognizerResult]:
         """
-        Vérifie si deux entités se chevauchent
-        """
-        return not (entity1.end <= entity2.start or entity1.start >= entity2.end)
-    
-    def _resolve_overlap_group(self, overlapping_entities: List[RecognizerResult], text: str = "") -> RecognizerResult:
-        """
-        Résout un groupe d'entités qui se chevauchent
-        Critères: 1) Priorité du type, 2) Score de confiance, 3) Longueur
+        Résout un groupe d'entités qui se chevauchent en découpant les intervalles
+        par ordre de priorité décroissant, plutôt qu'en gardant un seul "gagnant".
+
+        Sans ce découpage, une entité courte mais prioritaire (ex: TITRE_CIVILITE
+        sur "Monsieur") qui l'emporte sur une entité plus large qui la contient
+        (ex: PERSONNE sur "Monsieur Karel Derycke") ferait disparaître toute
+        l'entité perdante — y compris la partie qui ne chevauche pas ("Karel
+        Derycke" resterait en clair, non anonymisé). Ici, chaque entité ne cède
+        que la portion de son intervalle déjà couverte par une entité plus
+        prioritaire ; le reste est conservé comme entité indépendante.
+
+        Critères de priorité : 1) priorité du type, 2) score de confiance, 3) longueur.
         """
         def get_priority_score(entity):
             base_priority = self.priority_order.get(entity.entity_type, 0)
             confidence_bonus = entity.score * 10  # Score 0.9 = +9 points
-            
+
             # Calculer la longueur depuis les positions
             entity_length = entity.end - entity.start
             length_bonus = entity_length * 0.1  # Bonus longueur
-            
+
             # Bonus spécial pour IBAN vs FR_DRIVER_LICENSE
             if entity.entity_type == 'IBAN':
                 # Vérifier si c'est un vrai IBAN (commence par code pays)
@@ -224,27 +246,85 @@ class OverlapResolver:
                     entity_text = text[entity.start:entity.end].replace(' ', '')
                     if re.match(r'^[A-Z]{2}[0-9]{2}', entity_text):
                         base_priority += 20  # Bonus pour vrai IBAN
-            
+
             return base_priority + confidence_bonus + length_bonus
-        
+
         # Trier par score de priorité décroissant
-        sorted_entities = sorted(overlapping_entities, 
-                               key=get_priority_score, 
+        sorted_entities = sorted(overlapping_entities,
+                               key=get_priority_score,
                                reverse=True)
-        
-        winner = sorted_entities[0]
-        
-        # Log des entités écartées (si texte disponible)
-        if text:
-            for loser in sorted_entities[1:]:
-                loser_text = text[loser.start:loser.end]
-                logger.debug(f"❌ Écarté: {loser.entity_type} '{loser_text}' (score: {get_priority_score(loser):.1f})")
-            
-            winner_text = text[winner.start:winner.end]
-            logger.debug(f"✅ Gagnant: {winner.entity_type} '{winner_text}' (score: {get_priority_score(winner):.1f})")
-        
-        return winner
-    
+
+        covered: List[tuple] = []
+        kept: List[RecognizerResult] = []
+
+        for entity in sorted_entities:
+            remaining = self._subtract_intervals(entity.start, entity.end, covered)
+
+            if not remaining:
+                if text:
+                    logger.debug(
+                        f"❌ Écarté (entièrement couvert): {entity.entity_type} "
+                        f"'{text[entity.start:entity.end]}' (score: {get_priority_score(entity):.1f})"
+                    )
+                continue
+
+            for start, end in remaining:
+                trimmed_start, trimmed_end = self._trim_whitespace(start, end, text)
+                if trimmed_end - trimmed_start < 1:
+                    continue
+                kept.append(RecognizerResult(entity.entity_type, trimmed_start, trimmed_end, entity.score))
+                if text and (trimmed_start, trimmed_end) != (entity.start, entity.end):
+                    logger.debug(
+                        f"✂️ Découpé: {entity.entity_type} conserve "
+                        f"'{text[trimmed_start:trimmed_end]}' (partie non couverte)"
+                    )
+
+            covered = self._merge_intervals(covered + [(entity.start, entity.end)])
+
+        return kept
+
+    def _subtract_intervals(self, start: int, end: int, covered: List[tuple]) -> List[tuple]:
+        """Retourne les sous-intervalles de [start, end) non présents dans `covered`."""
+        result = []
+        cursor = start
+        for cov_start, cov_end in covered:
+            if cov_end <= cursor or cov_start >= end:
+                continue
+            if cov_start > cursor:
+                result.append((cursor, min(cov_start, end)))
+            cursor = max(cursor, cov_end)
+            if cursor >= end:
+                break
+        if cursor < end:
+            result.append((cursor, end))
+        return result
+
+    def _merge_intervals(self, intervals: List[tuple]) -> List[tuple]:
+        """Fusionne une liste d'intervalles [start, end) en intervalles disjoints triés."""
+        if not intervals:
+            return []
+        sorted_intervals = sorted(intervals)
+        merged = [sorted_intervals[0]]
+        for start, end in sorted_intervals[1:]:
+            last_start, last_end = merged[-1]
+            if start <= last_end:
+                merged[-1] = (last_start, max(last_end, end))
+            else:
+                merged.append((start, end))
+        return merged
+
+    def _trim_whitespace(self, start: int, end: int, text: str) -> tuple:
+        """Réduit [start, end) pour exclure les espaces en début/fin (évite de
+        remplacer un simple espace entre deux entités par un libellé)."""
+        if not text:
+            return start, end
+        end = min(end, len(text))
+        while start < end and text[start].isspace():
+            start += 1
+        while end > start and text[end - 1].isspace():
+            end -= 1
+        return start, end
+
     def add_entity_priority(self, entity_type: str, priority: int):
         """
         Ajoute ou modifie la priorité d'un type d'entité

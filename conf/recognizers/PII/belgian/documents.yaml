@@ -18,9 +18,9 @@ recognizer_registry:
       supported_entity: PASSEPORT_BELGE
       patterns:
         - name: Passeport belge
-          regex: "\\b[A-Z]{2}[0-9]{6}\\b"
+          regex: "\\b(?-i:[A-Z]{2})[0-9]{6}\\b"
           score: 0.95
         - name: Passeport avec espaces
-          regex: "\\b[A-Z]{2}\\s[0-9]{6}\\b"
+          regex: "\\b(?-i:[A-Z]{2})\\s[0-9]{6}\\b"
           score: 0.9
       context: ["passeport", "passport", "paspoort", "document de voyage"]
