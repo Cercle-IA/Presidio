@@ -5,10 +5,10 @@ recognizer_registry:
       supported_language: fr
       supported_entity: MARKET_SHARE
       patterns:
-        # Pourcentage suivi d'une référence au marché (ex: "50% de part de marché")
+        # Pourcentage suivi d'une référence au marché (ex: "50% de part de marché", "38% du marché", "27% sur le marché")
         # Lookahead : ne capture que le chiffre%, le contexte reste dans le texte final
-        - name: Percentage Before Market Reference
-          regex: "\\b\\d{1,3}(?:[.,]\\d{1,2})?%(?=\\s*(?:de\\s+(?:part(?:s)?\\s+de\\s+)?marché|du\\s+marché|de\\s+parts?|de\\s+market\\s+share))"
+        - name: Percentage With Market Reference
+          regex: "\\b\\d{1,3}(?:[.,]\\d{1,2})?%(?=\\s*(?:de\\s+(?:part(?:s)?\\s+de\\s+)?marché|du\\s+marché|sur\\s+(?:le\\s+)?marché|de\\s+parts?|de\\s+market\\s+share|du\\s+secteur))"
           score: 0.95
 
         # Pourcentage de chiffre d'affaires du marché (ex: "50% du CA du secteur")
@@ -16,19 +16,9 @@ recognizer_registry:
           regex: "\\b\\d{1,3}(?:[.,]\\d{1,2})?%(?=\\s*(?:du\\s+)?(?:chiffre\\s+d.affaires|CA|revenus?)\\s+(?:du\\s+)?(?:marché|secteur))"
           score: 0.85
 
-        # Positions de marché textuelles (ex: "leader du marché")
-        - name: Market Position
-          regex: "\\b(?:leader|numéro\\s+\\d+|\\d+(?:er|ème)\\s+acteur|position\\s+dominante|monopole)\\s+(?:du\\s+)?(?:marché|secteur)\\b"
-          score: 0.85
-
-        # Parts relatives textuelles (ex: "position majoritaire sur le marché")
-        - name: Relative Market Share
-          regex: "\\b(?:majoritaire|minoritaire|principale|significative)\\s+(?:part\\s+de\\s+)?marché\\b"
-          score: 0.8
-
-        # Pourcentage simple (score bas < threshold 0.35, requiert boost contextuel +0.35)
-        # Se déclenche quand "part de marché", "détient", "contrôle", etc. sont proches
-        - name: Simple Percentage In Market Context
+        # Pourcentage simple — score bas, requiert boost contextuel via phrases composées spécifiques
+        # Ex: "notre PDM est de 23%" ou "les 39% restants" dans un paragraphe qui mentionne "du marché"
+        - name: Simple Percentage With Specific Market Context
           regex: "\\b\\d{1,3}(?:[.,]\\d{1,2})?%"
           score: 0.3
 
@@ -37,20 +27,9 @@ recognizer_registry:
           "part de marché",
           "parts de marché",
           "market share",
+          "du marché",
+          "de marché",
           "position concurrentielle",
-          "leader",
-          "concurrent",
-          "secteur",
-          "industrie",
-          "concentration",
           "monopole",
           "oligopole",
-          "quota",
-          "chiffre d'affaires",
-          "revenus",
-          "détient",
-          "possède",
-          "contrôle",
-          "représente",
-          "atteint",
         ]

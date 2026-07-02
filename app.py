@@ -13,6 +13,7 @@ from entity_refiners import EntityRefinerManager
 from pipeline_manager import AnalysisPipeline
 from operators.market_share_operator import MarketShareRangeOperator
 from operators.turnover_operator import TurnoverRangeOperator
+from post_processors import OverlapResolver
 
 # Initialisation logger
 logging.basicConfig(level=logging.INFO,
@@ -337,6 +338,11 @@ def anonymize_text():
             res.start, res.end = refined_positions
             filtered_results.append(res)
             logger.info(f"✅ Entité {res.entity_type} conservée après refinement")
+
+        # Résolution des chevauchements : évite que MONTANT_FINANCIER et CHIFFRE_AFFAIRES
+        # détectent le même span (ex: "10 000 €") et génèrent un double remplacement
+        overlap_resolver = OverlapResolver()
+        filtered_results = overlap_resolver.process(filtered_results, text_to_anonymize)
 
         logger.info(f"🔍 Entités finales pour anonymisation: {[(r.entity_type, text_to_anonymize[r.start:r.end]) for r in filtered_results]}")
 

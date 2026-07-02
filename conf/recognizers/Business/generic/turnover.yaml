@@ -32,11 +32,7 @@ recognizer_registry:
         [
           "chiffre d'affaires",
           "chiffre d affaires",
-          "chiffre",
-          "affaires",
           "turnover",
           "revenue",
           "revenus",
-          "ventes",
-          "CA",
         ]
